@@ -4,9 +4,16 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
+.wp-like-post__wrapper {
+  align-items: center;
+  display: flex;
+}
 
-.wp-block-create-block-like-post-block {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
+.wp-like-post__button {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  margin: 0;
+  padding: 0;
 }

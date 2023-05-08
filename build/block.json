@@ -1,12 +1,22 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 2,
-  "name": "create-block/like-post-block",
-  "version": "0.1.0",
-  "title": "Like Post Block",
+  "name": "roelmagdaleno/like-post-block",
+  "version": "1.0.0",
+  "title": "Like Post",
   "category": "widgets",
   "icon": "smiley",
   "description": "Example block written with ESNext standard and JSX support – build step required.",
+  "attributes": {
+    "icon": {
+      "type": "string",
+      "default": "HandThumbUpIcon"
+    },
+    "iconWidth": {
+      "type": "number",
+      "default": 30
+    }
+  },
   "supports": {
     "html": false
   },
