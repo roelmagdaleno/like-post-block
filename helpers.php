@@ -1,39 +1,6 @@
 <?php
 
 /**
- * Get the ip addresses for the current post.
- * These ip addresses are used to prevent users from liking a post multiple times.
- *
- * @since  1.0.0
- *
- * @param  WP_Post   $post   The post to get the IP addresses for.
- * @return array             The IP addresses for the post.
- */
-function lpb_get_ip_addresses_from_post( WP_Post $post ): array {
-	$ip_addresses = get_post_meta( $post->ID, 'lpb_ip_addresses', true );
-	return empty( $ip_addresses ) ? array() : $ip_addresses;
-}
-
-/**
- * Get the number of likes from the current ip address.
- *
- * @since  1.0.0
- *
- * @param  WP_Post   $post   The post to get the likes from current ip address.
- * @return int               The number of likes from the current ip address.
- */
-function lpb_get_likes_from_current_ip_address( WP_Post $post ): int {
-	$user_ip = $_SERVER['REMOTE_ADDR'] ?? '';
-
-	if ( empty( $user_ip ) ) {
-		return 0;
-	}
-
-	$ip_addresses = lpb_get_ip_addresses_from_post( $post );
-	return $ip_addresses[ $user_ip ] ?? 0;
-}
-
-/**
  * Get the SVG icon markup for an icon.
  * The `$icon` parameter can be `HandThumbUpIcon` or `HeartIcon`.
  *
