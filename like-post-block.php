@@ -15,4 +15,6 @@
  * @package           Like Post Block
  */
 
+require_once 'required-files.php';
+
 ( new LPB_Block() )->hooks();
