@@ -49,6 +49,12 @@ class LPB_Block {
 			true
 		);
 
+		$icon  = $block['attrs']['icon'] ?? 'HandThumbUpIcon';
+		$icons = array(
+			'inactive' => lpb_get_svg_icon( $icon, $block['attrs']['iconWidth'] ),
+			'active'   => lpb_get_svg_icon( $icon, $block['attrs']['iconWidth'], 'active' ),
+		);
+
 		wp_localize_script( 'lpb-like', 'LPB', array(
 			'limit' => 10,
 			'nonce' => wp_create_nonce( 'lpb-like-post-nonce' ),
@@ -60,6 +66,7 @@ class LPB_Block {
 				),
 			),
 			'url'   => admin_url( 'admin-ajax.php' ),
+			'icons' => $icons,
 		) );
 
 		return $block_content;
@@ -119,9 +126,15 @@ class LPB_Block {
 	 * @param  string   $icon_type    The icon type.
 	 * @return string                 The rendered block HTML.
 	 */
-	protected function template( int $likes, array $attributes, string $icon_type = 'inactive' ): string {
+	protected function template(
+		int $likes,
+		array $attributes,
+		string $icon_type = 'inactive'
+	): string {
+		$button_css = 'active' === $icon_type ? 'wp-like-post__button--liked' : '';
+
 		$html  = '<div class="wp-like-post__wrapper">';
-		$html .= '<button type="button" class="wp-like-post__button" style="height: ' . $attributes['iconWidth'] . 'px">';
+		$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" style="height: ' . $attributes['iconWidth'] . 'px">';
 		$html .= lpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $icon_type );
 		$html .= '</button>';
 		$html .= '<div class="wp-like-post__count">';

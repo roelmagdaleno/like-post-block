@@ -42,6 +42,23 @@ function lbp_animateIcon() {
 }
 
 /**
+ * Replace the like icon with the active icon.
+ * We also add the `wp-like-post__button--liked` class to the button.
+ *
+ * @since 1.0.0
+ */
+function lpb_replaceIcon() {
+    const button = document.querySelector('.wp-like-post__button');
+
+    if (!button || button.classList.contains('wp-like-post__button--liked')) {
+        return;
+    }
+
+    button.classList.add('wp-like-post__button--liked');
+    button.innerHTML = LPB.icons.active;
+}
+
+/**
  * Like the post.
  *
  * We increment the like count and send an AJAX request to the server.
@@ -83,6 +100,8 @@ function lpb_likePost() {
      }, 500);
 
     processChanges();
+
+    lpb_replaceIcon();
     lbp_animateIcon();
 }
 
