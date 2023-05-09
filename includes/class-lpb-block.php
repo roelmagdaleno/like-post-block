@@ -31,7 +31,7 @@ class LPB_Block {
 	public function enqueue_assets( string $block_content, array $block ): string {
 		global $post;
 
-		if ( empty( $block['blockName'] ) ) {
+		if ( ! $post || empty( $block['blockName'] ) ) {
 			return $block_content;
 		}
 
