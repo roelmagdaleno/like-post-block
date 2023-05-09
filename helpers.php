@@ -12,7 +12,7 @@
  * @return string           The SVG markup.
  */
 function lpb_get_svg_icon(
-	string $icon = 'HandThumbUpIcon',
+	string $icon = LPB_DEFAULT_ICON,
 	int $size = 30,
 	string $type = 'inactive'
 ): string {

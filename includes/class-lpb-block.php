@@ -49,10 +49,11 @@ class LPB_Block {
 			true
 		);
 
-		$icon  = $block['attrs']['icon'] ?? 'HandThumbUpIcon';
-		$icons = array(
-			'inactive' => lpb_get_svg_icon( $icon, $block['attrs']['iconWidth'] ),
-			'active'   => lpb_get_svg_icon( $icon, $block['attrs']['iconWidth'], 'active' ),
+		$icon       = $block['attrs']['icon'] ?? LPB_DEFAULT_ICON;
+		$icon_width = $block['attrs']['iconWidth'] ?? LPB_DEFAULT_ICON_WIDTH;
+		$icons      = array(
+			'inactive' => lpb_get_svg_icon( $icon, $icon_width ),
+			'active'   => lpb_get_svg_icon( $icon, $icon_width, 'active' ),
 		);
 
 		wp_localize_script( 'lpb-like', 'LPB', array(
@@ -84,11 +85,11 @@ class LPB_Block {
 			'attributes'      => array(
 				'icon'      => array(
 					'type'    => 'string',
-					'default' => 'HandThumbUpIcon',
+					'default' => LPB_DEFAULT_ICON,
 				),
 				'iconWidth' => array(
 					'type'    => 'number',
-					'default' => 30,
+					'default' => LPB_DEFAULT_ICON_WIDTH,
 				),
 			),
 			'render_callback' => array( $this, 'render' ),
