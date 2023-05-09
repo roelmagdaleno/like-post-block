@@ -43,7 +43,7 @@ class LPB_Block {
 
 		wp_enqueue_script(
 			'lpb-like',
-			plugins_url( 'public/js/lpb-like.js', __FILE__ ),
+			plugins_url( 'public/js/lpb-like.js', __DIR__ ),
 			array(),
 			LPB_VERSION,
 			true
