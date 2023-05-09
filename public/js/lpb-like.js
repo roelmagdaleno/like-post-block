@@ -106,11 +106,11 @@ function lpb_likePost() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const wrapper = document.querySelector('.wp-like-post__wrapper');
+    const button = document.querySelector('.wp-like-post__button');
 
-    if (!wrapper) {
+    if (!button) {
         return;
     }
 
-    wrapper.addEventListener('click', lpb_likePost);
+    button.addEventListener('click', lpb_likePost);
 });
