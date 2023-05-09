@@ -18,7 +18,20 @@
     }
   },
   "supports": {
-    "html": false
+    "html": false,
+    "color": {
+      "text": true
+    },
+    "typography": {
+      "fontSize": true,
+      "__experimentalFontFamily": true,
+      "__experimentalTextDecoration": true,
+      "__experimentalFontStyle": true,
+      "__experimentalFontWeight": true,
+      "__experimentalDefaultControls": {
+        "fontSize": true
+      }
+    }
   },
   "textdomain": "like-post-block",
   "editorScript": "file:./index.js",

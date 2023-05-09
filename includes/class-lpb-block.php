@@ -132,13 +132,19 @@ class LPB_Block {
 		array $attributes,
 		string $icon_type = 'inactive'
 	): string {
-		$button_css = 'active' === $icon_type ? 'wp-like-post__button--liked' : '';
+		$button_css       = 'active' === $icon_type ? 'wp-like-post__button--liked' : '';
+		$block_attributes = ! str_contains( $_SERVER['REQUEST_URI'], '/wp-json/' )
+			? get_block_wrapper_attributes( array( 'class' => 'wp-like-post__count' ) )
+			: 'class="wp-like-post__count""';
 
 		$html  = '<div class="wp-like-post__wrapper">';
-		$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" style="height: ' . $attributes['iconWidth'] . 'px">';
+
+		$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" ';
+		$html .= 'style="height: ' . $attributes['iconWidth'] . 'px">';
 		$html .= lpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $icon_type );
 		$html .= '</button>';
-		$html .= '<div class="wp-like-post__count">';
+
+		$html .= '<div ' . $block_attributes . '>';
 		$html .= $likes;
 		$html .= '</div> </div>';
 
