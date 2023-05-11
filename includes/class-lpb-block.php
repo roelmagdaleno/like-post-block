@@ -83,13 +83,17 @@ class LPB_Block {
 	public function register_block(): void {
 		register_block_type( dirname( __DIR__ ) . '/build', array(
 			'attributes'      => array(
-				'icon'      => array(
+				'icon'           => array(
 					'type'    => 'string',
 					'default' => LPB_DEFAULT_ICON,
 				),
-				'iconWidth' => array(
+				'iconWidth'      => array(
 					'type'    => 'number',
 					'default' => LPB_DEFAULT_ICON_WIDTH,
+				),
+				'iconColorValue' => array(
+					'type'    => 'string',
+					'default' => LPB_DEFAULT_ICON_COLOR_VALUE,
 				),
 			),
 			'render_callback' => array( $this, 'render' ),
@@ -140,13 +144,13 @@ class LPB_Block {
 		$html  = '<div class="wp-like-post__wrapper">';
 
 		$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" ';
-		$html .= 'style="height: ' . $attributes['iconWidth'] . 'px">';
+		$html .= 'style="height: ' . $attributes['iconWidth'] . 'px; ';
+		$html .= 'color: ' . $attributes['iconColorValue'] . ';">';
 		$html .= lpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $icon_type );
 		$html .= '</button>';
 
-		$html .= '<div ' . $block_attributes . '>';
-		$html .= $likes;
-		$html .= '</div> </div>';
+		$html .= '<div ' . $block_attributes . '>' . $likes . '</div>';
+		$html .= '</div>';
 
 		return $html;
 	}

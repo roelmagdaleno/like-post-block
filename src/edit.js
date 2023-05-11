@@ -3,8 +3,11 @@ import './editor.scss';
 import Heroicon from "./components/Heroicon";
 
 import {
-    useBlockProps,
+    __experimentalColorGradientSettingsDropdown as ColorGradientSettingsDropdown,
+    __experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients,
     InspectorControls,
+    useBlockProps,
+    withColors,
 } from '@wordpress/block-editor';
 
 import {
@@ -17,10 +20,11 @@ import {
 
 import ServerSideRender from '@wordpress/server-side-render';
 
-export default function Edit( { attributes, setAttributes } ) {
+export function Edit( { attributes, setAttributes, iconColor, setIconColor, clientId } ) {
     const {
         icon,
         iconWidth,
+        iconColorValue,
     } = attributes;
 
     const HandThumbUpIcon = (
@@ -40,6 +44,8 @@ export default function Edit( { attributes, setAttributes } ) {
             height={ 25 }
         />
     );
+
+    const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
 	return (
         <>
@@ -74,6 +80,29 @@ export default function Edit( { attributes, setAttributes } ) {
                     </PanelRow>
                 </PanelBody>
             </InspectorControls>
+            <InspectorControls group="color">
+                <ColorGradientSettingsDropdown
+                    __experimentalIsRenderedInSidebar
+                    settings={ [
+                        {
+                            colorValue: iconColor.color || iconColorValue,
+                            label: __( 'Icon', 'like-post-block' ),
+                            onColorChange: ( colorValue ) => {
+                                setIconColor( colorValue );
+                                setAttributes( { iconColorValue: colorValue } );
+                            },
+                            isShownByDefault: true,
+                            resetAllFilter: () => {
+                                setIconColor( undefined );
+                                setAttributes( { iconColorValue: undefined } );
+                            },
+                        },
+                    ] }
+                    __experimentalHasMultipleOrigins={ true }
+                    panelId={ clientId }
+                    { ...colorGradientSettings }
+                />
+            </InspectorControls>
 
             <div { ...useBlockProps() }>
                 <ServerSideRender
@@ -84,3 +113,9 @@ export default function Edit( { attributes, setAttributes } ) {
         </>
 	);
 }
+
+const iconColorAttributes = {
+    iconColor: 'icon-color',
+};
+
+export default withColors( iconColorAttributes )( Edit );

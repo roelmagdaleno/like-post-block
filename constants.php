@@ -27,3 +27,11 @@ const LPB_DEFAULT_ICON = 'HandThumbUpIcon';
  * @since 1.0.0
  */
 const LPB_DEFAULT_ICON_WIDTH = 30;
+
+/**
+ * The default icon color value.
+ * The format is in hexadecimal.
+ *
+ * @since 1.0.0
+ */
+const LPB_DEFAULT_ICON_COLOR_VALUE = '#000000';
