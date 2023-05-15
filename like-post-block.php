@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:       Like Post Block
- * Description:       Example block written with ESNext standard and JSX support – build step required.
+ * Description:       Add a button to like any post type.
  * Requires at least: 6.2
  * Requires PHP:      8.0
  * Version:           1.0.0

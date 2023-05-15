@@ -3,4 +3,7 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-
+.components-button svg#like-post-block-icon,
+.block-editor-block-icon.has-colors svg#like-post-block-icon {
+  fill: none !important;
+}

@@ -141,8 +141,9 @@ class LPB_Block {
 			? get_block_wrapper_attributes( array( 'class' => 'wp-like-post__count' ) )
 			: 'class="wp-like-post__count""';
 
-		$html  = '<div class="wp-like-post__wrapper">';
+		$gap_styles = $this->gap_styles( $attributes );
 
+		$html  = '<div class="wp-like-post__wrapper" style="' . $gap_styles . '">';
 		$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" ';
 		$html .= 'style="height: ' . $attributes['iconWidth'] . 'px; ';
 		$html .= 'color: ' . $attributes['iconColorValue'] . ';">';
@@ -153,5 +154,29 @@ class LPB_Block {
 		$html .= '</div>';
 
 		return $html;
+	}
+
+	/**
+	 * Returns the gap styles.
+	 * This code is the same as in the `wp-includes/blocks/gallery.php` file.
+	 *
+	 * @since  1.0.0
+	 *
+	 * @param  array   $attributes   The block attributes.
+	 * @return string                The gap styles.
+	 */
+	protected function gap_styles( array $attributes ): string {
+		$gap = _wp_array_get( $attributes, array( 'style', 'spacing', 'blockGap' ) );
+		$gap = is_string( $gap ) ? $gap : '';
+		$gap = $gap && preg_match( '%[\\\(&=}]|/\*%', $gap ) ? null : $gap;
+
+		// Get spacing CSS variable from preset value if provided.
+		if ( is_string( $gap ) && str_contains( $gap, 'var:preset|spacing|' ) ) {
+			$index_to_splice = strrpos( $gap, '|' ) + 1;
+			$slug            = _wp_to_kebab_case( substr( $gap, $index_to_splice ) );
+			$gap             = "var(--wp--preset--spacing--$slug)";
+		}
+
+		return empty( $gap ) ? '' : 'gap:' . $gap . ';';
 	}
 }

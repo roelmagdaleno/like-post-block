@@ -5,8 +5,7 @@
 	"version": "1.0.0",
 	"title": "Like Post",
 	"category": "widgets",
-	"icon": "smiley",
-	"description": "Example block written with ESNext standard and JSX support – build step required.",
+	"description": "Add a button to like any post type.",
     "attributes": {
         "icon": {
             "type": "string",
@@ -36,6 +35,9 @@
             "__experimentalDefaultControls": {
                 "fontSize": true
             }
+        },
+        "spacing": {
+            "blockGap": true
         }
     },
 	"textdomain": "like-post-block",
