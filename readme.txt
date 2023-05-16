@@ -1,39 +1,50 @@
 === Like Post Block ===
-Contributors:      The WordPress Contributors
-Tags:              block
-Tested up to:      5.9
-Stable tag:        0.1.0
+Contributors:      rokumetal
+Tags:              like, heart, like post, block
+Tested up to:      6.2
+Stable tag:        1.0.0
+Requires PHP:      8.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
-Example block written with ESNext standard and JSX support – build step required.
+Add a button to like any post type.
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+The Like Post Block plugin registers a WordPress block that allows you to add a like button to your WordPress block editor.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+=== Key Features ===
+
+* Add a like button to any post, page or custom post type
+* Limit the number of likes per user
+* Save user's IP address to prevent multiple likes
+* Supports any Gutenberg template
+
+=== Development ===
+
+* [View on GitHub](https://github.com/roelmagdaleno/like-post-block)
 
 == Installation ==
 
 This section describes how to install the plugin and get it working.
 
-e.g.
-
 1. Upload the plugin files to the `/wp-content/plugins/like-post-block` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-
+2. Activate the plugin through the "Plugins" screen in WordPress.
+3. Inside the Block Editor, search the "Like Post" block and insert it.
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Can I insert the block in any Gutenberg template? =
 
-An answer to that question.
+Yes, you can insert the block in any Gutenberg template.
 
-= What about foo bar? =
+= Can I limit the number of likes per user? =
 
-Answer to foo bar dilemma.
+Yes, you can limit the number of likes per user. The default value is 10 and the minimum value is 1. This setting is per block, so you can have different values for each block.
+
+= Can I save the user's IP address to prevent multiple likes? =
+
+Yes, you can save the user's IP address to prevent multiple likes. This action happens automatically.
 
 == Screenshots ==
 
@@ -45,11 +56,7 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
-= 0.1.0 =
-* Release
+= 1.0.0 =
 
-== Arbitrary section ==
+* Initial release
 
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
