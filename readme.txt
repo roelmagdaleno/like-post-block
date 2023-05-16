@@ -1,9 +1,10 @@
-=== Like Post Block ===
+=== Like Post ===
 Contributors:      rokumetal
 Tags:              like, heart, like post, block
+Requires at least: 6.2
 Tested up to:      6.2
-Stable tag:        1.0.0
 Requires PHP:      8.0
+Stable tag:        1.0.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,6 +46,10 @@ Yes, you can limit the number of likes per user. The default value is 10 and the
 = Can I save the user's IP address to prevent multiple likes? =
 
 Yes, you can save the user's IP address to prevent multiple likes. This action happens automatically.
+
+= Can the user likes comments? =
+
+No, the user can only like posts, pages and custom post types.
 
 == Screenshots ==
 

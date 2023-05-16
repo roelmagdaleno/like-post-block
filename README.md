@@ -1,5 +1,7 @@
 # Like Post Block
 
+![Like Post Block](https://i.imgur.com/dOAmwFh.png)
+
 The Like Post Block plugin registers a WordPress block that allows you to add a like button to your WordPress block editor.
 
 ### Key Features
