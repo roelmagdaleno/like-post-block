@@ -57,17 +57,15 @@ class LPB_Block {
 		);
 
 		wp_localize_script( 'lpb-like', 'LPB', array(
-			'limit' => 10,
-			'nonce' => wp_create_nonce( 'lpb-like-post-nonce' ),
-			'post'  => array(
-				'id'    => $post->ID,
-				'likes' => array(
-					'total'    => $lpb_post->likes(),
-					'fromUser' => $lpb_post->likes_from_user(),
-				),
+			'limit'   => $block['attrs']['limit'] ?? LPB_DEFAULT_LIMIT,
+			'nonce'   => wp_create_nonce( 'lpb-like-post-nonce' ),
+			'post_id' => $post->ID,
+			'likes'   => array(
+				'total'    => $lpb_post->likes(),
+				'fromUser' => $lpb_post->likes_from_user(),
 			),
-			'url'   => admin_url( 'admin-ajax.php' ),
-			'icons' => $icons,
+			'url'     => admin_url( 'admin-ajax.php' ),
+			'icons'   => $icons,
 		) );
 
 		return $block_content;
@@ -94,6 +92,10 @@ class LPB_Block {
 				'iconColorValue' => array(
 					'type'    => 'string',
 					'default' => LPB_DEFAULT_ICON_COLOR_VALUE,
+				),
+				'limit'          => array(
+					'type'    => 'number',
+					'default' => LPB_DEFAULT_LIMIT,
 				),
 			),
 			'render_callback' => array( $this, 'render' ),

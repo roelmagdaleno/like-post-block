@@ -35,3 +35,10 @@ const LPB_DEFAULT_ICON_WIDTH = 30;
  * @since 1.0.0
  */
 const LPB_DEFAULT_ICON_COLOR_VALUE = '#000000';
+
+/**
+ * The default limit.
+ *
+ * @since 1.0.0
+ */
+const LPB_DEFAULT_LIMIT = 10;

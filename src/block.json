@@ -18,6 +18,10 @@
         "iconColorValue": {
             "type": "string",
             "default": "#000000"
+        },
+        "limit": {
+            "type": "number",
+            "default": 10
         }
     },
 	"supports": {

@@ -40,11 +40,13 @@ When the user hasn't like the post yet, the icon is outlined and when the user h
 
 These icons are powered by [Heroicons](https://heroicons.com/).
 
+### Size
+
+You can only change the size of the icon by using the size setting.
+
 ## Count
 
-The count is the number of likes a post has. You can increase the count by clicking the like button.
-
-The count is saved in the `wp_postmeta` database table, and is displayed to the user.
+The count is the number of likes a post has. You can increase the count by clicking the like button. The count is saved in the `wp_postmeta` database table, and is displayed to the user.
 
 ### Limit
 

@@ -58,59 +58,96 @@ function lpb_replaceIcon() {
     button.innerHTML = LPB.icons.active;
 }
 
-/**
- * Like the post.
- *
- * We increment the like count and send an AJAX request to the server.
- * The AJAX request is debounced to prevent multiple requests.
- * The request is sent after 500ms of the last click.
- * We also animate the like icon.
- *
- * If the user has already reached the limit of liked posts, we don't do anything.
- *
- * @since 1.0.0
- */
-function lpb_likePost() {
-    if (parseInt(LPB.post.likes.fromUser) >= parseInt(LPB.limit)) {
-        return;
+let lpbPost = (function () {
+    /**
+     * The Constructor.
+     *
+     * @since 1.0.0
+     *
+     * @param {object} settings The settings object.
+     *
+     * @constructor
+     */
+    function Constructor(settings) {
+        // Freeze settings so that they cannot be modified
+        Object.freeze(settings);
+
+        // Define instance properties
+        Object.defineProperties(this, {
+            likes: {
+                value: {
+                    total: settings.likes.total,
+                    fromUser: settings.likes.fromUser,
+                },
+                writable: true
+            },
+            _settings: { value: settings }
+        });
     }
 
-    lpbLike++;
-    LPB.post.likes.fromUser++;
+    /**
+     * Like the post.
+     *
+     * We increment the like count and send an AJAX request to the server.
+     * The AJAX request is debounced to prevent multiple requests.
+     * The request is sent after 500ms of the last click.
+     * We also animate the like icon.
+     *
+     * If the user has already reached the limit of liked posts, we don't do anything.
+     *
+     * @since 1.0.0
+     */
+    Constructor.prototype.like = function () {
+        if (parseInt(this.likes.fromUser) >= parseInt(this._settings.limit)) {
+            return;
+        }
 
-    const postLikes = parseInt(LPB.post.likes.total);
-    const likeCount = document.querySelector('.wp-like-post__count');
+        lpbLike++;
+        this.likes.fromUser++;
 
-    likeCount.innerHTML = (postLikes + lpbLike).toString();
+        const postLikes = parseInt(this.likes.total);
+        const likeCount = document.querySelector('.wp-like-post__count');
 
-    const processChanges = lpb_debounce(() => {
-        const request = new XMLHttpRequest();
+        likeCount.innerHTML = (postLikes + lpbLike).toString();
 
-        request.open('POST', LPB.url, true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        const processChanges = lpb_debounce(() => {
+            const request = new XMLHttpRequest();
 
-        request.onload = () => {
-            if (request.status >= 200 && request.status < 400) {
-                LPB.post.likes.total = LPB.post.likes.total + lpbLike;
-                lpbLike = 0;
-            }
-        };
+            request.open('POST', this._settings.url, true);
+            request.setRequestHeader(
+                'Content-Type',
+                'application/x-www-form-urlencoded; charset=UTF-8'
+            );
 
-        request.send(`action=lpb_like_post&post_id=${LPB.post.id}&count=${lpbLike}&nonce=${LPB.nonce}`);
-     }, 500);
+            request.onload = () => {
+                if (request.status >= 200 && request.status < 400) {
+                    this.likes.total = this.likes.total + lpbLike;
+                    lpbLike = 0;
+                }
+            };
 
-    processChanges();
+            const postId = this._settings.post_id;
+            const nonce = this._settings.nonce;
 
-    lpb_replaceIcon();
-    lbp_animateIcon();
-}
+            request.send(`action=lpb_like_post&post_id=${postId}&count=${lpbLike}&nonce=${nonce}`);
+        }, 500);
+
+        processChanges();
+
+        lpb_replaceIcon();
+        lbp_animateIcon();
+    };
+
+    return Constructor;
+})();
 
 document.addEventListener('DOMContentLoaded', () => {
     const button = document.querySelector('.wp-like-post__button');
 
-    if (!button) {
+    if (!button || !window.LPB) {
         return;
     }
 
-    button.addEventListener('click', lpb_likePost);
+    const currentPost = new lpbPost(window.LPB);
+    button.addEventListener('click', () => currentPost.like());
 });

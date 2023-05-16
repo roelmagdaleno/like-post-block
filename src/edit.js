@@ -23,8 +23,9 @@ import ServerSideRender from '@wordpress/server-side-render';
 export function Edit( { attributes, setAttributes, iconColor, setIconColor, clientId } ) {
     const {
         icon,
-        iconWidth,
         iconColorValue,
+        iconWidth,
+        limit,
     } = attributes;
 
     const HandThumbUpIcon = (
@@ -50,6 +51,17 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
 	return (
         <>
             <InspectorControls>
+                <PanelBody>
+                    <PanelRow>
+                        <NumberControl
+                            label={ __( 'Limit', 'like-post-block' ) }
+                            value={ limit }
+                            min={ 1 }
+                            onChange={ ( limit ) => setAttributes( { limit: parseInt( limit ) } ) }
+                            help={ __( 'Limit the number of likes per user.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
+                </PanelBody>
                 <PanelBody title={ __( 'Icon', 'like-post-block' ) }>
                     <PanelRow title="Select Icon">
                         <ToggleGroupControl
