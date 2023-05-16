@@ -4,9 +4,10 @@ The Like Post Block plugin registers a WordPress block that allows you to add a 
 
 ### Key Features
 
-- Add a like button to any post type
+- Add a like button to any post, page or custom post type
 - Limit the number of likes per user
 - Save user's IP address to prevent multiple likes
+- Supports any Gutenberg template
 
 ## Styling
 

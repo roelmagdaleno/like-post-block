@@ -12,10 +12,12 @@
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start"
+		"start": "wp-scripts start",
+        "minify": "terser public/js/lpb-like.js --compress --mangle --output public/js/lpb-like.min.js"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^26.3.0"
+		"@wordpress/scripts": "^26.3.0",
+		"terser": "^5.17.4"
 	},
 	"dependencies": {
 		"@heroicons/react": "^2.0.17",
