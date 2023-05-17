@@ -14,6 +14,8 @@ Add a button to like any post type.
 
 The Like Post Block plugin registers a WordPress block that allows you to add a like button to your WordPress block editor.
 
+You can insert this block in a single post, page, custom post type, and you can also insert it in any Gutenberg template.
+
 === Key Features ===
 
 * Add a like button to any post, page or custom post type
