@@ -21,7 +21,7 @@ class LPB_Post {
 	 *
 	 * @param WP_Post|int|string   $post   The post object or ID.
 	 */
-	public function __construct( WP_Post|int|string $post ) {
+	public function __construct( $post ) {
 		$this->post = $post instanceof WP_Post ? $post : get_post( $post );
 	}
 

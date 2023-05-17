@@ -4,7 +4,7 @@
  * Plugin Name:       Like Post Block
  * Description:       Add a button to like any post type.
  * Requires at least: 6.2
- * Requires PHP:      8.0
+ * Requires PHP:      7.4
  * Version:           1.0.0
  * Author:            Roel Magdaleno
  * Author URI:        https://roelmagdaleno.com
