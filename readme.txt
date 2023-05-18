@@ -1,4 +1,4 @@
-=== Like Post ===
+=== Like Post Block ===
 Contributors:      rokumetal
 Tags:              like, heart, like post, block
 Requires at least: 6.2
