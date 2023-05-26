@@ -103,6 +103,10 @@ class LPB_Block {
 					'type'    => 'number',
 					'default' => LPB_DEFAULT_LIMIT,
 				),
+				'renderWithAjax' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
 			),
 			'render_callback' => array( $this, 'render' ),
 		) );

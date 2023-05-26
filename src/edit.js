@@ -16,6 +16,7 @@ import {
     __experimentalToggleGroupControlOptionIcon as ToggleGroupControlOptionIcon,
     PanelBody,
     PanelRow,
+    ToggleControl,
 } from '@wordpress/components';
 
 import ServerSideRender from '@wordpress/server-side-render';
@@ -26,6 +27,7 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
         iconColorValue,
         iconWidth,
         limit,
+        renderWithAjax,
     } = attributes;
 
     const HandThumbUpIcon = (
@@ -59,6 +61,14 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                             min={ 1 }
                             onChange={ ( limit ) => setAttributes( { limit: parseInt( limit ) } ) }
                             help={ __( 'Limit the number of likes per user.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label={ __( 'Render with AJAX', 'like-post-block' ) }
+                            checked={ renderWithAjax }
+                            onChange={ ( renderWithAjax ) => setAttributes( { renderWithAjax: renderWithAjax } ) }
+                            help={ __( 'If you are using a caching system, enabling this feature will avoid from being cached. The count will show after your page is rendered.', 'like-post-block' ) }
                         />
                     </PanelRow>
                 </PanelBody>

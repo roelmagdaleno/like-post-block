@@ -22,6 +22,10 @@
         "limit": {
             "type": "number",
             "default": 10
+        },
+        "renderWithAjax": {
+            "type": "boolean",
+            "default": true
         }
     },
 	"supports": {
