@@ -11,8 +11,7 @@ class LPB_Meta_Columns {
 	 * @since 1.1.0
 	 */
 	public function hooks(): void {
-		$this->post_type_hooks();
-
+		add_action( 'admin_init', array( $this, 'post_type_hooks' ) );
 		add_action( 'pre_get_posts', array( $this, 'sort_by_likes' ) );
 	}
 
@@ -39,7 +38,7 @@ class LPB_Meta_Columns {
 	 *
 	 * @since 1.1.0
 	 */
-	protected function post_type_hooks(): void {
+	public function post_type_hooks(): void {
 		$post_types = get_post_types( array( 'public' => true ) );
 
 		if ( empty( $post_types ) ) {
