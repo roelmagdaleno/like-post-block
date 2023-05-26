@@ -165,7 +165,15 @@ class LPB_Block {
 		$html .= '<div ' . $block_attributes . '>' . $likes . '</div>';
 		$html .= '</div>';
 
-		return $html;
+		/**
+		 * Filters the rendered block HTML.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param string   $html         The rendered block HTML.
+		 * @param array    $attributes   The block attributes.
+		 */
+		return apply_filters( 'lpb_likes_rendered_html', $html, $attributes );
 	}
 
 	/**
