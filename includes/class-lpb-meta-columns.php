@@ -12,8 +12,33 @@ class LPB_Meta_Columns {
 	 */
 	public function hooks(): void {
 		$this->post_type_hooks();
+
+		add_action( 'pre_get_posts', array( $this, 'sort_by_likes' ) );
 	}
 
+	/**
+	 * Sort the posts by likes.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param WP_Query   $query   The WP_Query instance.
+	 */
+	public function sort_by_likes( WP_Query $query ): void {
+		$order_by = $query->get( 'orderby' );
+
+		if ( 'likes' !== $order_by ) {
+			return;
+		}
+
+		$query->set( 'orderby', 'meta_value_num' );
+		$query->set( 'meta_key', 'lpb_likes' );
+	}
+
+	/**
+	 * Register the action and filter hooks for public post types.
+	 *
+	 * @since 1.1.0
+	 */
 	protected function post_type_hooks(): void {
 		$post_types = get_post_types( array( 'public' => true ) );
 
