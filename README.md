@@ -10,6 +10,7 @@ The Like Post Block plugin registers a WordPress block that allows you to add a 
 - Limit the number of likes per user
 - Save user's IP address to prevent multiple likes
 - Supports any Gutenberg template
+- Render likes using AJAX
 
 ## Styling
 
@@ -56,6 +57,12 @@ The count is the number of likes a post has. You can increase the count by click
 You can limit the number of likes per user by using the limit setting.
 
 Default: `10`
+
+### AJAX
+
+If you are using a caching system, enabling this feature will avoid from being cached. The count will show after your page is rendered.
+
+By default this feature is enabled and can be disabled by using the AJAX setting.
 
 ### IP Address
 
