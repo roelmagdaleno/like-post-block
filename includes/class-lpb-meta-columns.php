@@ -30,7 +30,7 @@ class LPB_Meta_Columns {
 		}
 
 		$query->set( 'orderby', 'meta_value_num' );
-		$query->set( 'meta_key', 'lpb_likes' );
+		$query->set( 'meta_key', LPB_META_KEY );
 	}
 
 	/**
@@ -78,7 +78,7 @@ class LPB_Meta_Columns {
 			return;
 		}
 
-		$likes = get_post_meta( $post_id, 'lpb_likes', true );
+		$likes = get_post_meta( $post_id, LPB_META_KEY, true );
 
 		echo esc_html( $likes );
 	}

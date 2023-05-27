@@ -15,6 +15,13 @@ const LPB_VERSION = '1.0.0';
 const LPB_BLOCK_NAMESPACE = 'roelmagdaleno/like-post-block';
 
 /**
+ * The meta key.
+ *
+ * @since 1.1.0
+ */
+const LPB_META_KEY = 'lpb_likes';
+
+/**
  * The default icon.
  *
  * @since 1.0.0

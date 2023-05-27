@@ -33,7 +33,7 @@ class LPB_Post {
 	 * @return int The number of likes for the post.
 	 */
 	public function likes(): int {
-		$likes = get_post_meta( $this->post->ID, 'lpb_likes', true );
+		$likes = get_post_meta( $this->post->ID, LPB_META_KEY, true );
 		return empty( $likes ) ? 0 : $likes;
 	}
 

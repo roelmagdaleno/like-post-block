@@ -15,6 +15,7 @@ class LPB_Block {
 		add_filter( 'render_block', array( $this, 'enqueue_assets' ), 10, 2 );
 
 		( new LPB_Like() )->hooks();
+		( new LPB_REST_API() )->hooks();
 
 		if ( ! is_admin() ) {
 			return;

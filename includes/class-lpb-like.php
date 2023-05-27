@@ -33,7 +33,7 @@ class LPB_Like {
 		}
 
 		$post_id = intval( $_POST['post_id'] );
-		$likes   = get_post_meta( $post_id, 'lpb_likes', true );
+		$likes   = get_post_meta( $post_id, LPB_META_KEY, true );
 
 		if ( ! $likes ) {
 			$likes = 0;
@@ -41,7 +41,7 @@ class LPB_Like {
 
 		// Update likes from the current post.
 		$likes = $likes + intval( $_POST['count'] );
-		update_post_meta( $post_id, 'lpb_likes', $likes );
+		update_post_meta( $post_id, LPB_META_KEY, $likes );
 
 		$user_ip = $_SERVER['REMOTE_ADDR'] ?? '';
 
