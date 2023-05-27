@@ -13,6 +13,28 @@ class LPB_Like {
 	public function hooks(): void {
 		add_action( 'wp_ajax_nopriv_lpb_like_post', array( $this, 'like' ) );
 		add_action( 'wp_ajax_lpb_like_post', array( $this, 'like' ) );
+		add_action( 'wp_ajax_nopriv_lpb_get_post_likes', array( $this, 'get' ) );
+		add_action( 'wp_ajax_lpb_get_post_likes', array( $this, 'get' ) );
+	}
+
+	public function get() {
+		$nonce = sanitize_text_field( $_POST['nonce'] );
+
+		if ( ! wp_verify_nonce( $nonce, 'lpb-get-post-likes-nonce' ) ) {
+			wp_send_json_error( 'Invalid nonce' );
+		}
+
+		if ( ! isset( $_POST['post_id'] ) ) {
+			wp_send_json_error( 'Invalid request' );
+		}
+
+		$post_id  = intval( $_POST['post_id'] );
+		$lpb_post = new LPB_Post( $post_id );
+
+		wp_send_json_success( array(
+			'likes'   => $lpb_post->likes(),
+			'post_id' => $post_id,
+		) );
 	}
 
 	/**

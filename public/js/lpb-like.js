@@ -58,6 +58,18 @@ function lpb_replaceIcon() {
     button.innerHTML = LPB.icons.active;
 }
 
+function lpb_getXHR(url) {
+    const request = new XMLHttpRequest();
+
+    request.open('POST', url, true);
+    request.setRequestHeader(
+        'Content-Type',
+        'application/x-www-form-urlencoded; charset=UTF-8'
+    );
+
+    return request;
+}
+
 let lpbPost = (function () {
     /**
      * The Constructor.
@@ -111,13 +123,7 @@ let lpbPost = (function () {
         likeCount.innerHTML = (postLikes + lpbLike).toString();
 
         const processChanges = lpb_debounce(() => {
-            const request = new XMLHttpRequest();
-
-            request.open('POST', this._settings.url, true);
-            request.setRequestHeader(
-                'Content-Type',
-                'application/x-www-form-urlencoded; charset=UTF-8'
-            );
+            const request = lpb_getXHR(this._settings.url);
 
             request.onload = () => {
                 if (request.status >= 200 && request.status < 400) {
@@ -127,7 +133,7 @@ let lpbPost = (function () {
             };
 
             const postId = this._settings.post_id;
-            const nonce = this._settings.nonce;
+            const nonce = this._settings.nonces.likePost;
 
             request.send(`action=lpb_like_post&post_id=${postId}&count=${lpbLike}&nonce=${nonce}`);
         }, 500);
@@ -137,6 +143,48 @@ let lpbPost = (function () {
         lpb_replaceIcon();
         lbp_animateIcon();
     };
+
+    /**
+     * Get the total number of likes for the current post.
+     * We send an AJAX request to the server and update the like count.
+     *
+     * @since 1.0.0
+     */
+    Constructor.prototype.getLikes = function () {
+        const request = lpb_getXHR(this._settings.url);
+
+        request.onload = () => {
+            if (request.status >= 200 && request.status < 400) {
+                const response = JSON.parse(request.responseText);
+                const countEl = document.querySelector('.wp-like-post__count');
+                const buttonEl = document.querySelector('.wp-like-post__button');
+
+                if (!countEl || !buttonEl) {
+                    return;
+                }
+
+                const likes = parseInt(response.data.likes);
+                const printedLikes = parseInt(this.likes.total);
+
+                if (likes === printedLikes) {
+                    return;
+                }
+
+                if (likes > 0) {
+                    buttonEl.classList.add('wp-like-post__button--liked');
+                    buttonEl.innerHTML = LPB.icons.active;
+                }
+
+                countEl.innerHTML = likes.toString();
+            }
+        };
+
+        const postId = this._settings.post_id;
+        const nonce = this._settings.nonces.getLikes;
+        const attributes = JSON.stringify(this._settings.block);
+
+        request.send(`action=lpb_get_post_likes&post_id=${postId}&nonce=${nonce}&attributes=${attributes}`);
+    }
 
     return Constructor;
 })();
@@ -149,5 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const currentPost = new lpbPost(window.LPB);
+
+    if (LPB.attributes.renderWithAjax) {
+        currentPost.getLikes();
+    }
+
     button.addEventListener('click', () => currentPost.like());
 });

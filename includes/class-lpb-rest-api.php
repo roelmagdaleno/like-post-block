@@ -22,7 +22,7 @@ class LPB_REST_API {
 	 *
 	 * @since 1.1.0
 	 */
-	public function register_meta_fields() {
+	public function register_meta_fields(): void {
 		$post_types = get_post_types( array( 'public' => true ) );
 
 		if ( empty( $post_types ) ) {

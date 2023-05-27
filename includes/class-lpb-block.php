@@ -63,16 +63,22 @@ class LPB_Block {
 			'active'   => lpb_get_svg_icon( $icon, $icon_width, 'active' ),
 		);
 
+		$block['attrs']['renderWithAjax'] ??= true;
+
 		wp_localize_script( 'lpb-like', 'LPB', array(
-			'limit'   => $block['attrs']['limit'] ?? LPB_DEFAULT_LIMIT,
-			'nonce'   => wp_create_nonce( 'lpb-like-post-nonce' ),
-			'post_id' => $post->ID,
-			'likes'   => array(
+			'limit'      => $block['attrs']['limit'] ?? LPB_DEFAULT_LIMIT,
+			'nonces'     => array(
+				'getLikes' => wp_create_nonce( 'lpb-get-post-likes-nonce' ),
+				'likePost' => wp_create_nonce( 'lpb-like-post-nonce' ),
+			),
+			'post_id'    => $post->ID,
+			'likes'      => array(
 				'total'    => $lpb_post->likes(),
 				'fromUser' => $lpb_post->likes_from_user(),
 			),
-			'url'     => admin_url( 'admin-ajax.php' ),
-			'icons'   => $icons,
+			'url'        => admin_url( 'admin-ajax.php' ),
+			'icons'      => $icons,
+			'attributes' => $block['attrs'],
 		) );
 
 		return $block_content;
@@ -125,79 +131,13 @@ class LPB_Block {
 		global $post;
 
 		if ( ! $post ) {
-			return $this->template( 0, $attributes );
+			return lpb_get_rendered_html( 0, $attributes );
 		}
 
 		$lpb_post  = new LPB_Post( $post );
-		$icon_type = $lpb_post->likes_from_user() ? 'active' : 'inactive';
+		$likes     = $lpb_post->likes();
+		$icon_type = $likes && $lpb_post->likes_from_user() ? 'active' : 'inactive';
 
-		return $this->template( $lpb_post->likes(), $attributes, $icon_type );
-	}
-
-	/**
-	 * Returns the block HTML.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @param  int      $likes        The number of likes.
-	 * @param  array    $attributes   The block attributes.
-	 * @param  string   $icon_type    The icon type.
-	 * @return string                 The rendered block HTML.
-	 */
-	protected function template(
-		int $likes,
-		array $attributes,
-		string $icon_type = 'inactive'
-	): string {
-		$button_css       = 'active' === $icon_type ? 'wp-like-post__button--liked' : '';
-		$block_attributes = ! str_contains( $_SERVER['REQUEST_URI'], '/wp-json/' )
-			? get_block_wrapper_attributes( array( 'class' => 'wp-like-post__count' ) )
-			: 'class="wp-like-post__count""';
-
-		$gap_styles = $this->gap_styles( $attributes );
-
-		$html  = '<div class="wp-like-post__wrapper" style="' . $gap_styles . '">';
-		$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" ';
-		$html .= 'style="height: ' . $attributes['iconWidth'] . 'px; ';
-		$html .= 'color: ' . $attributes['iconColorValue'] . ';">';
-		$html .= lpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $icon_type );
-		$html .= '</button>';
-
-		$html .= '<div ' . $block_attributes . '>' . $likes . '</div>';
-		$html .= '</div>';
-
-		/**
-		 * Filters the rendered block HTML.
-		 *
-		 * @since 1.1.0
-		 *
-		 * @param string   $html         The rendered block HTML.
-		 * @param array    $attributes   The block attributes.
-		 */
-		return apply_filters( 'lpb_likes_rendered_html', $html, $attributes );
-	}
-
-	/**
-	 * Returns the gap styles.
-	 * This code is the same as in the `wp-includes/blocks/gallery.php` file.
-	 *
-	 * @since  1.0.0
-	 *
-	 * @param  array   $attributes   The block attributes.
-	 * @return string                The gap styles.
-	 */
-	protected function gap_styles( array $attributes ): string {
-		$gap = _wp_array_get( $attributes, array( 'style', 'spacing', 'blockGap' ) );
-		$gap = is_string( $gap ) ? $gap : '';
-		$gap = $gap && preg_match( '%[\\\(&=}]|/\*%', $gap ) ? null : $gap;
-
-		// Get spacing CSS variable from preset value if provided.
-		if ( is_string( $gap ) && str_contains( $gap, 'var:preset|spacing|' ) ) {
-			$index_to_splice = strrpos( $gap, '|' ) + 1;
-			$slug            = _wp_to_kebab_case( substr( $gap, $index_to_splice ) );
-			$gap             = "var(--wp--preset--spacing--$slug)";
-		}
-
-		return empty( $gap ) ? '' : 'gap:' . $gap . ';';
+		return lpb_get_rendered_html( $likes, $attributes, $icon_type );
 	}
 }
