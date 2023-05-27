@@ -5,7 +5,7 @@
  *
  * @since 1.0.0
  */
-const LPB_VERSION = '1.0.0';
+const LPB_VERSION = '1.1.0';
 
 /**
  * The plugin block namespace.
