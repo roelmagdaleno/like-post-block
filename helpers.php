@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  string   $type   The type of icon to display (inactive, active).
  * @return string           The SVG markup.
  */
-function lpb_get_svg_icon(
-	string $icon = LPB_DEFAULT_ICON,
+function rolpb_get_svg_icon(
+	string $icon = ROLPB_DEFAULT_ICON,
 	int $size = 30,
 	string $type = 'inactive'
 ): string {
@@ -44,7 +44,7 @@ function lpb_get_svg_icon(
  * @param  string   $icon_type    The icon type.
  * @return string                 The rendered block HTML.
  */
-function lpb_get_rendered_html(
+function rolpb_get_rendered_html(
 	int $likes,
 	array $attributes,
 	string $icon_type = 'inactive'
@@ -54,17 +54,17 @@ function lpb_get_rendered_html(
 		? get_block_wrapper_attributes( array( 'class' => 'wp-like-post__count' ) )
 		: 'class="wp-like-post__count""';
 
-	$gap_styles = lpb_gap_styles( $attributes );
+	$gap_styles = rolpb_gap_styles( $attributes );
 
-	$attributes['icon']           ??= LPB_DEFAULT_ICON;
-	$attributes['iconColorValue'] ??= LPB_DEFAULT_ICON_COLOR_VALUE;
-	$attributes['iconWidth']      ??= LPB_DEFAULT_ICON_WIDTH;
+	$attributes['icon']           ??= ROLPB_DEFAULT_ICON;
+	$attributes['iconColorValue'] ??= ROLPB_DEFAULT_ICON_COLOR_VALUE;
+	$attributes['iconWidth']      ??= ROLPB_DEFAULT_ICON_WIDTH;
 
 	$html  = '<div class="wp-like-post__wrapper" style="' . $gap_styles . '">';
 	$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" ';
 	$html .= 'style="height: ' . $attributes['iconWidth'] . 'px; ';
 	$html .= 'color: ' . $attributes['iconColorValue'] . ';">';
-	$html .= lpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $icon_type );
+	$html .= rolpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $icon_type );
 	$html .= '</button>';
 
 	$html .= '<div ' . $block_attributes . '>' . $likes . '</div>';
@@ -78,7 +78,7 @@ function lpb_get_rendered_html(
 	 * @param string   $html         The rendered block HTML.
 	 * @param array    $attributes   The block attributes.
 	 */
-	return apply_filters( 'lpb_likes_rendered_html', $html, $attributes );
+	return apply_filters( 'ROLPB_Likes_rendered_html', $html, $attributes );
 }
 
 /**
@@ -90,7 +90,7 @@ function lpb_get_rendered_html(
  * @param  array   $attributes   The block attributes.
  * @return string                The gap styles.
  */
-function lpb_gap_styles( array $attributes ): string {
+function rolpb_gap_styles( array $attributes ): string {
 	$gap = _wp_array_get( $attributes, array( 'style', 'spacing', 'blockGap' ) );
 	$gap = is_string( $gap ) ? $gap : '';
 	$gap = $gap && preg_match( '%[\\\(&=}]|/\*%', $gap ) ? null : $gap;

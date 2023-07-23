@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( class_exists( 'LPB_REST_API' ) ) {
+if ( class_exists( 'ROLPB_REST_API' ) ) {
 	return;
 }
 
-class LPB_REST_API {
+class ROLPB_REST_API {
 	/**
 	 * Register the action and filter hooks.
 	 *
@@ -34,7 +34,7 @@ class LPB_REST_API {
 		}
 
 		foreach ( $post_types as $post_type ) {
-			register_meta( $post_type, LPB_META_KEY, array(
+			register_meta( $post_type, ROLPB_META_KEY, array(
 				'show_in_rest' => true,
 				'single'       => true,
 				'type'         => 'integer',

@@ -1,5 +1,5 @@
 let lpbTimerId;
-let lpbLike = 0;
+let rolpbLike = 0;
 
 /**
  * Debounce function.
@@ -12,7 +12,7 @@ let lpbLike = 0;
  *
  * @returns {(function(...[*]): void)|*}
  */
-function lpb_debounce(func, delay) {
+function rolpb_debounce(func, delay) {
     return function(...args) {
         if (lpbTimerId) {
             clearTimeout(lpbTimerId);
@@ -30,7 +30,7 @@ function lpb_debounce(func, delay) {
  *
  * @since 1.0.0
  */
-function lbp_animateIcon() {
+function rolbp_animateIcon() {
     const icon = document.querySelector('.wp-like-post__button svg');
 
     if (!icon) {
@@ -47,7 +47,7 @@ function lbp_animateIcon() {
  *
  * @since 1.0.0
  */
-function lpb_replaceIcon() {
+function rolpb_replaceIcon() {
     const button = document.querySelector('.wp-like-post__button');
 
     if (!button || button.classList.contains('wp-like-post__button--liked')) {
@@ -55,10 +55,18 @@ function lpb_replaceIcon() {
     }
 
     button.classList.add('wp-like-post__button--liked');
-    button.innerHTML = LPB.icons.active;
+    button.innerHTML = ROLPB.icons.active;
 }
 
-function lpb_getXHR(url) {
+/**
+ * Get the XMLHttpRequest object.
+ *
+ * @since 1.0.0
+ *
+ * @param {string} url The URL to send the request to.
+ * @returns {XMLHttpRequest} The XMLHttpRequest object.
+ */
+function rolpb_getXHR(url) {
     const request = new XMLHttpRequest();
 
     request.open('POST', url, true);
@@ -114,34 +122,34 @@ let lpbPost = (function () {
             return;
         }
 
-        lpbLike++;
+        rolpbLike++;
         this.likes.fromUser++;
 
         const postLikes = parseInt(this.likes.total);
         const likeCount = document.querySelector('.wp-like-post__count');
 
-        likeCount.innerHTML = (postLikes + lpbLike).toString();
+        likeCount.innerHTML = (postLikes + rolpbLike).toString();
 
-        const processChanges = lpb_debounce(() => {
-            const request = lpb_getXHR(this._settings.url);
+        const processChanges = rolpb_debounce(() => {
+            const request = rolpb_getXHR(this._settings.url);
 
             request.onload = () => {
                 if (request.status >= 200 && request.status < 400) {
-                    this.likes.total = this.likes.total + lpbLike;
-                    lpbLike = 0;
+                    this.likes.total = this.likes.total + rolpbLike;
+                    rolpbLike = 0;
                 }
             };
 
             const postId = this._settings.post_id;
             const nonce = this._settings.nonces.likePost;
 
-            request.send(`action=lpb_like_post&post_id=${postId}&count=${lpbLike}&nonce=${nonce}`);
+            request.send(`action=rolpb_like_post&post_id=${postId}&count=${rolpbLike}&nonce=${nonce}`);
         }, 500);
 
         processChanges();
 
-        lpb_replaceIcon();
-        lbp_animateIcon();
+        rolpb_replaceIcon();
+        rolbp_animateIcon();
     };
 
     /**
@@ -151,7 +159,7 @@ let lpbPost = (function () {
      * @since 1.0.0
      */
     Constructor.prototype.getLikes = function () {
-        const request = lpb_getXHR(this._settings.url);
+        const request = rolpb_getXHR(this._settings.url);
 
         request.onload = () => {
             if (request.status >= 200 && request.status < 400) {
@@ -172,7 +180,7 @@ let lpbPost = (function () {
 
                 if (likes > 0) {
                     buttonEl.classList.add('wp-like-post__button--liked');
-                    buttonEl.innerHTML = LPB.icons.active;
+                    buttonEl.innerHTML = ROLPB.icons.active;
                 }
 
                 countEl.innerHTML = likes.toString();
@@ -183,7 +191,7 @@ let lpbPost = (function () {
         const nonce = this._settings.nonces.getLikes;
         const attributes = JSON.stringify(this._settings.block);
 
-        request.send(`action=lpb_get_post_likes&post_id=${postId}&nonce=${nonce}&attributes=${attributes}`);
+        request.send(`action=rolpb_get_post_likes&post_id=${postId}&nonce=${nonce}&attributes=${attributes}`);
     }
 
     return Constructor;
@@ -192,13 +200,13 @@ let lpbPost = (function () {
 document.addEventListener('DOMContentLoaded', () => {
     const button = document.querySelector('.wp-like-post__button');
 
-    if (!button || !window.LPB) {
+    if (!button || !window.ROLPB) {
         return;
     }
 
-    const currentPost = new lpbPost(window.LPB);
+    const currentPost = new lpbPost(window.ROLPB);
 
-    if (LPB.attributes.renderWithAjax) {
+    if (ROLPB.attributes.renderWithAjax) {
         currentPost.getLikes();
     }
 

@@ -9,35 +9,35 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-const LPB_VERSION = '1.1.0';
+const ROLPB_VERSION = '1.1.0';
 
 /**
  * The plugin block namespace.
  *
  * @since 1.0.0
  */
-const LPB_BLOCK_NAMESPACE = 'roelmagdaleno/like-post-block';
+const ROLPB_BLOCK_NAMESPACE = 'roelmagdaleno/like-post-block';
 
 /**
  * The meta key.
  *
  * @since 1.1.0
  */
-const LPB_META_KEY = 'lpb_likes';
+const ROLPB_META_KEY = 'rolpb_Likes';
 
 /**
  * The default icon.
  *
  * @since 1.0.0
  */
-const LPB_DEFAULT_ICON = 'HandThumbUpIcon';
+const ROLPB_DEFAULT_ICON = 'HandThumbUpIcon';
 
 /**
  * The default icon width.
  *
  * @since 1.0.0
  */
-const LPB_DEFAULT_ICON_WIDTH = 30;
+const ROLPB_DEFAULT_ICON_WIDTH = 30;
 
 /**
  * The default icon color value.
@@ -45,7 +45,7 @@ const LPB_DEFAULT_ICON_WIDTH = 30;
  *
  * @since 1.0.0
  */
-const LPB_DEFAULT_ICON_COLOR_VALUE = '#000000';
+const ROLPB_DEFAULT_ICON_COLOR_VALUE = '#000000';
 
 /**
  * The default limit.

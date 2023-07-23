@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( class_exists( 'LPB_Block' ) ) {
+if ( class_exists( 'ROLPB_Block' ) ) {
 	return;
 }
 
-class LPB_Block {
+class ROLPB_Block {
 	/**
 	 * Register the action and filter hooks.
 	 *
@@ -18,14 +18,14 @@ class LPB_Block {
 		add_action( 'init', array( $this, 'register_block' ) );
 		add_filter( 'render_block', array( $this, 'enqueue_assets' ), 10, 2 );
 
-		( new LPB_Like() )->hooks();
-		( new LPB_REST_API() )->hooks();
+		( new ROLPB_Like() )->hooks();
+		( new ROLPB_REST_API() )->hooks();
 
 		if ( ! is_admin() ) {
 			return;
 		}
 
-		( new LPB_Meta_Columns() )->hooks();
+		( new ROLPB_Meta_Columns() )->hooks();
 	}
 
 	/**
@@ -46,39 +46,39 @@ class LPB_Block {
 			return $block_content;
 		}
 
-		if ( LPB_BLOCK_NAMESPACE !== $block['blockName'] ) {
+		if ( ROLPB_BLOCK_NAMESPACE !== $block['blockName'] ) {
 			return $block_content;
 		}
 
-		$lpb_post = new LPB_Post( $post );
+		$rolpb_post = new ROLPB_Post( $post );
 
 		wp_enqueue_script(
 			'lpb-like',
-			plugins_url( 'public/js/lpb-like.min.js', __DIR__ ),
+			plugins_url( 'public/js/rolpb-like.min.js', __DIR__ ),
 			array(),
-			LPB_VERSION,
+			ROLPB_VERSION,
 			true
 		);
 
-		$icon       = $block['attrs']['icon'] ?? LPB_DEFAULT_ICON;
-		$icon_width = $block['attrs']['iconWidth'] ?? LPB_DEFAULT_ICON_WIDTH;
+		$icon       = $block['attrs']['icon'] ?? ROLPB_DEFAULT_ICON;
+		$icon_width = $block['attrs']['iconWidth'] ?? ROLPB_DEFAULT_ICON_WIDTH;
 		$icons      = array(
-			'inactive' => lpb_get_svg_icon( $icon, $icon_width ),
-			'active'   => lpb_get_svg_icon( $icon, $icon_width, 'active' ),
+			'inactive' => rolpb_get_svg_icon( $icon, $icon_width ),
+			'active'   => rolpb_get_svg_icon( $icon, $icon_width, 'active' ),
 		);
 
 		$block['attrs']['renderWithAjax'] ??= true;
 
-		wp_localize_script( 'lpb-like', 'LPB', array(
+		wp_localize_script( 'lpb-like', 'ROLPB', array(
 			'limit'      => $block['attrs']['limit'] ?? LPB_DEFAULT_LIMIT,
 			'nonces'     => array(
-				'getLikes' => wp_create_nonce( 'lpb-get-post-likes-nonce' ),
-				'likePost' => wp_create_nonce( 'lpb-like-post-nonce' ),
+				'getLikes' => wp_create_nonce( 'rolpb-get-post-likes-nonce' ),
+				'likePost' => wp_create_nonce( 'rolpb-like-post-nonce' ),
 			),
 			'post_id'    => $post->ID,
 			'likes'      => array(
-				'total'    => $lpb_post->likes(),
-				'fromUser' => $lpb_post->likes_from_user(),
+				'total'    => $rolpb_post->likes(),
+				'fromUser' => $rolpb_post->likes_from_user(),
 			),
 			'url'        => admin_url( 'admin-ajax.php' ),
 			'icons'      => $icons,
@@ -100,15 +100,15 @@ class LPB_Block {
 			'attributes'      => array(
 				'icon'           => array(
 					'type'    => 'string',
-					'default' => LPB_DEFAULT_ICON,
+					'default' => ROLPB_DEFAULT_ICON,
 				),
 				'iconWidth'      => array(
 					'type'    => 'number',
-					'default' => LPB_DEFAULT_ICON_WIDTH,
+					'default' => ROLPB_DEFAULT_ICON_WIDTH,
 				),
 				'iconColorValue' => array(
 					'type'    => 'string',
-					'default' => LPB_DEFAULT_ICON_COLOR_VALUE,
+					'default' => ROLPB_DEFAULT_ICON_COLOR_VALUE,
 				),
 				'limit'          => array(
 					'type'    => 'number',
@@ -135,13 +135,13 @@ class LPB_Block {
 		global $post;
 
 		if ( ! $post ) {
-			return lpb_get_rendered_html( 0, $attributes );
+			return rolpb_get_rendered_html( 0, $attributes );
 		}
 
-		$lpb_post  = new LPB_Post( $post );
-		$likes     = $lpb_post->likes();
-		$icon_type = $likes && $lpb_post->likes_from_user() ? 'active' : 'inactive';
+		$rolpb_post = new ROLPB_Post( $post );
+		$likes      = $rolpb_post->likes();
+		$icon_type  = $likes && $rolpb_post->likes_from_user() ? 'active' : 'inactive';
 
-		return lpb_get_rendered_html( $likes, $attributes, $icon_type );
+		return rolpb_get_rendered_html( $likes, $attributes, $icon_type );
 	}
 }

@@ -21,4 +21,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once 'required-files.php';
 
-( new LPB_Block() )->hooks();
+( new ROLPB_Block() )->hooks();

@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( class_exists( 'LPB_Meta_Columns' ) ) {
+if ( class_exists( 'ROLPB_Meta_Columns' ) ) {
 	return;
 }
 
-class LPB_Meta_Columns {
+class ROLPB_Meta_Columns {
 	/**
 	 * Register the action and filter hooks.
 	 *
@@ -34,7 +34,7 @@ class LPB_Meta_Columns {
 		}
 
 		$query->set( 'orderby', 'meta_value_num' );
-		$query->set( 'meta_key', LPB_META_KEY );
+		$query->set( 'meta_key', ROLPB_META_KEY );
 	}
 
 	/**
@@ -65,7 +65,7 @@ class LPB_Meta_Columns {
 	 * @return array              The post type tables columns.
 	 */
 	public function column_heading( array $columns ): array {
-		$columns['likes'] = __( 'Likes', 'like-post-block' );
+		$columns['likes'] = 'Likes';
 		return $columns;
 	}
 
@@ -82,7 +82,7 @@ class LPB_Meta_Columns {
 			return;
 		}
 
-		$likes = get_post_meta( $post_id, LPB_META_KEY, true );
+		$likes = get_post_meta( $post_id, ROLPB_META_KEY, true );
 
 		echo esc_html( $likes );
 	}

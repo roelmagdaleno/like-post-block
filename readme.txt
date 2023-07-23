@@ -4,7 +4,7 @@ Tags:              like, heart, like post, block
 Requires at least: 6.2
 Tested up to:      6.2
 Requires PHP:      7.4
-Stable tag:        1.2.0
+Stable tag:        1.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,7 +66,7 @@ No, the user can only like posts, pages and custom post types.
 = 1.1.0 =
 
 * Render the like button with AJAX to avoid caching systems.
-* The `lpb_likes` meta key can be found in each REST API for posts, pages and custom post types.
+* The `ROLPB_Likes` meta key can be found in each REST API for posts, pages and custom post types.
 * New `Likes` column in the posts, pages and custom post types list tables.
 
 = 1.0.0 =

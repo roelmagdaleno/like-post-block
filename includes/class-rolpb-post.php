@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( class_exists( 'LPB_Post' ) ) {
+if ( class_exists( 'ROLPB_Post' ) ) {
 	return;
 }
 
-class LPB_Post {
+class ROLPB_Post {
 	/**
 	 * The post object.
 	 *
@@ -37,7 +37,7 @@ class LPB_Post {
 	 * @return int The number of likes for the post.
 	 */
 	public function likes(): int {
-		$likes = get_post_meta( $this->post->ID, LPB_META_KEY, true );
+		$likes = get_post_meta( $this->post->ID, ROLPB_META_KEY, true );
 		return empty( $likes ) ? 0 : $likes;
 	}
 
@@ -49,7 +49,7 @@ class LPB_Post {
 	 * @return int   The number of likes from the current ip address.
 	 */
 	public function likes_from_user(): int {
-		$user_ip = $_SERVER['REMOTE_ADDR'] ?? '';
+		$user_ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
 
 		if ( empty( $user_ip ) ) {
 			return 0;
@@ -68,7 +68,7 @@ class LPB_Post {
 	 * @return array   The IP addresses for the post.
 	 */
 	public function ip_addresses(): array {
-		$ip_addresses = get_post_meta( $this->post->ID, 'lpb_ip_addresses', true );
+		$ip_addresses = get_post_meta( $this->post->ID, 'rolpb_ip_addresses', true );
 		return empty( $ip_addresses ) ? array() : $ip_addresses;
 	}
 }

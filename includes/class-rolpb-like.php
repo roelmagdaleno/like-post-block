@@ -4,39 +4,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( class_exists( 'LPB_Like' ) ) {
+if ( class_exists( 'ROLPB_Like' ) ) {
 	return;
 }
 
-class LPB_Like {
+class ROLPB_Like {
 	/**
 	 * Register the action and filter hooks.
 	 *
 	 * @since 1.0.0
 	 */
 	public function hooks(): void {
-		add_action( 'wp_ajax_nopriv_lpb_like_post', array( $this, 'like' ) );
-		add_action( 'wp_ajax_lpb_like_post', array( $this, 'like' ) );
-		add_action( 'wp_ajax_nopriv_lpb_get_post_likes', array( $this, 'get' ) );
-		add_action( 'wp_ajax_lpb_get_post_likes', array( $this, 'get' ) );
+		add_action( 'wp_ajax_nopriv_rolpb_Like_post', array( $this, 'like' ) );
+		add_action( 'wp_ajax_rolpb_Like_post', array( $this, 'like' ) );
+		add_action( 'wp_ajax_nopriv_rolpb_get_post_likes', array( $this, 'get' ) );
+		add_action( 'wp_ajax_rolpb_get_post_likes', array( $this, 'get' ) );
 	}
 
-	public function get() {
+	/**
+	 * Get the likes from a post.
+	 * This function is called via AJAX.
+	 *
+	 * @since 1.1.0
+	 */
+	public function get(): void {
 		$nonce = sanitize_text_field( $_POST['nonce'] );
 
-		if ( ! wp_verify_nonce( $nonce, 'lpb-get-post-likes-nonce' ) ) {
-			wp_send_json_error( 'Invalid nonce' );
+		if ( ! wp_verify_nonce( $nonce, 'rolpb-get-post-likes-nonce' ) ) {
+			wp_send_json_error( 'Invalid nonce.' );
 		}
 
 		if ( ! isset( $_POST['post_id'] ) ) {
-			wp_send_json_error( 'Invalid request' );
+			wp_send_json_error( 'The required data does not exist.' );
 		}
 
-		$post_id  = intval( $_POST['post_id'] );
-		$lpb_post = new LPB_Post( $post_id );
+		$post_id = intval( sanitize_text_field( $_POST['post_id'] ) );
+		$post    = new ROLPB_Post( $post_id );
 
 		wp_send_json_success( array(
-			'likes'   => $lpb_post->likes(),
+			'likes'   => $post->likes(),
 			'post_id' => $post_id,
 		) );
 	}
@@ -50,7 +56,7 @@ class LPB_Like {
 	public function like(): void {
 		$nonce = sanitize_text_field( $_POST['nonce'] );
 
-		if ( ! wp_verify_nonce( $nonce, 'lpb-like-post-nonce' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'rolpb-like-post-nonce' ) ) {
 			wp_send_json_error( 'Invalid nonce.' );
 		}
 
@@ -59,7 +65,7 @@ class LPB_Like {
 		}
 
 		$post_id = intval( sanitize_text_field( $_POST['post_id'] ) );
-		$likes   = get_post_meta( $post_id, LPB_META_KEY, true );
+		$likes   = get_post_meta( $post_id, ROLPB_META_KEY, true );
 
 		if ( ! $likes ) {
 			$likes = 0;
@@ -69,19 +75,19 @@ class LPB_Like {
 
 		// Update likes from the current post.
 		$likes = $likes + $count;
-		update_post_meta( $post_id, LPB_META_KEY, $likes );
+		update_post_meta( $post_id, ROLPB_META_KEY, $likes );
 
 		$user_ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
 
 		// Update likes from the current user.
 		if ( ! empty( $user_ip ) ) {
-			$lpb_post     = new LPB_Post( $post_id );
-			$ip_addresses = $lpb_post->ip_addresses();
+			$ROLPB_Post     = new ROLPB_Post( $post_id );
+			$ip_addresses = $ROLPB_Post->ip_addresses();
 			$user_count   = $ip_addresses[ $user_ip ] ?? 0;
 
 			$ip_addresses[ $user_ip ] = $user_count + $count;
 
-			update_post_meta( $post_id, 'lpb_ip_addresses', $ip_addresses );
+			update_post_meta( $post_id, 'rolpb_ip_addresses', $ip_addresses );
 		}
 
 		wp_send_json_success( array(

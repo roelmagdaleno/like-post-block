@@ -1,6 +1,6 @@
 {
 	"name": "like-post-block",
-	"version": "1.2.0",
+	"version": "1.1.0",
 	"description": "Add a button to like any post type.",
 	"author": "Roel Magdaleno",
 	"license": "GPL-2.0-or-later",
@@ -13,7 +13,7 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start",
-        "minify": "terser public/js/lpb-like.js --compress --mangle --output public/js/lpb-like.min.js"
+        "minify": "terser public/js/rolpb-like.js --compress --mangle --output public/js/rolpb-like.min.js"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.3.0",
