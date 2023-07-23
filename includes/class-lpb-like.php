@@ -51,25 +51,27 @@ class LPB_Like {
 		$nonce = sanitize_text_field( $_POST['nonce'] );
 
 		if ( ! wp_verify_nonce( $nonce, 'lpb-like-post-nonce' ) ) {
-			wp_send_json_error( 'Invalid nonce' );
+			wp_send_json_error( 'Invalid nonce.' );
 		}
 
-		if ( ! isset( $_POST['post_id'] ) || ! isset( $_POST['count'] ) ) {
-			wp_send_json_error( 'Invalid request' );
+		if ( ! isset( $_POST['post_id'], $_POST['count'] ) ) {
+			wp_send_json_error( 'The required data does not exist.' );
 		}
 
-		$post_id = intval( $_POST['post_id'] );
+		$post_id = intval( sanitize_text_field( $_POST['post_id'] ) );
 		$likes   = get_post_meta( $post_id, LPB_META_KEY, true );
 
 		if ( ! $likes ) {
 			$likes = 0;
 		}
 
+		$count = intval( sanitize_text_field( $_POST['count'] ) );
+
 		// Update likes from the current post.
-		$likes = $likes + intval( $_POST['count'] );
+		$likes = $likes + $count;
 		update_post_meta( $post_id, LPB_META_KEY, $likes );
 
-		$user_ip = $_SERVER['REMOTE_ADDR'] ?? '';
+		$user_ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
 
 		// Update likes from the current user.
 		if ( ! empty( $user_ip ) ) {
@@ -77,13 +79,13 @@ class LPB_Like {
 			$ip_addresses = $lpb_post->ip_addresses();
 			$user_count   = $ip_addresses[ $user_ip ] ?? 0;
 
-			$ip_addresses[ $user_ip ] = $user_count + intval( $_POST['count'] );
+			$ip_addresses[ $user_ip ] = $user_count + $count;
 
 			update_post_meta( $post_id, 'lpb_ip_addresses', $ip_addresses );
 		}
 
 		wp_send_json_success( array(
-			'count' => (int) $_POST['count'],
+			'count' => $count,
 			'likes' => $likes,
 		) );
 	}
