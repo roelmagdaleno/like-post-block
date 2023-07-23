@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 /**
  * Get the SVG icon markup for an icon.
  * The `$icon` parameter can be `HandThumbUpIcon` or `HeartIcon`.

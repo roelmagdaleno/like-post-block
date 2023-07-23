@@ -15,6 +15,10 @@
  * @package           Like Post Block
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 require_once 'required-files.php';
 
 ( new LPB_Block() )->hooks();
