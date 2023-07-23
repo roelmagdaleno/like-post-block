@@ -66,7 +66,7 @@ No, the user can only like posts, pages and custom post types.
 = 1.1.0 =
 
 * Render the like button with AJAX to avoid caching systems.
-* The `ROLPB_Likes` meta key can be found in each REST API for posts, pages and custom post types.
+* The `rolpb_likes` meta key can be found in each REST API for posts, pages and custom post types.
 * New `Likes` column in the posts, pages and custom post types list tables.
 
 = 1.0.0 =

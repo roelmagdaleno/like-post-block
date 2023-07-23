@@ -78,7 +78,7 @@ function rolpb_get_rendered_html(
 	 * @param string   $html         The rendered block HTML.
 	 * @param array    $attributes   The block attributes.
 	 */
-	return apply_filters( 'ROLPB_Likes_rendered_html', $html, $attributes );
+	return apply_filters( 'rolpb_likes_rendered_html', $html, $attributes );
 }
 
 /**

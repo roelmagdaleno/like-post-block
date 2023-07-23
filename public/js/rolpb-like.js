@@ -1,4 +1,4 @@
-let lpbTimerId;
+let rolpbTimerId;
 let rolpbLike = 0;
 
 /**
@@ -14,11 +14,11 @@ let rolpbLike = 0;
  */
 function rolpb_debounce(func, delay) {
     return function(...args) {
-        if (lpbTimerId) {
-            clearTimeout(lpbTimerId);
+        if (rolpbTimerId) {
+            clearTimeout(rolpbTimerId);
         }
 
-        lpbTimerId = setTimeout(() => {
+        rolpbTimerId = setTimeout(() => {
             func.apply(this, args);
         }, delay);
     };

@@ -15,8 +15,8 @@ class ROLPB_Like {
 	 * @since 1.0.0
 	 */
 	public function hooks(): void {
-		add_action( 'wp_ajax_nopriv_rolpb_Like_post', array( $this, 'like' ) );
-		add_action( 'wp_ajax_rolpb_Like_post', array( $this, 'like' ) );
+		add_action( 'wp_ajax_nopriv_rolpb_like_post', array( $this, 'like' ) );
+		add_action( 'wp_ajax_rolpb_like_post', array( $this, 'like' ) );
 		add_action( 'wp_ajax_nopriv_rolpb_get_post_likes', array( $this, 'get' ) );
 		add_action( 'wp_ajax_rolpb_get_post_likes', array( $this, 'get' ) );
 	}
@@ -81,8 +81,8 @@ class ROLPB_Like {
 
 		// Update likes from the current user.
 		if ( ! empty( $user_ip ) ) {
-			$ROLPB_Post     = new ROLPB_Post( $post_id );
-			$ip_addresses = $ROLPB_Post->ip_addresses();
+			$rolpb_post   = new ROLPB_Post( $post_id );
+			$ip_addresses = $rolpb_post->ip_addresses();
 			$user_count   = $ip_addresses[ $user_ip ] ?? 0;
 
 			$ip_addresses[ $user_ip ] = $user_count + $count;

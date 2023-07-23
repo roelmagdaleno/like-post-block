@@ -23,7 +23,7 @@ const ROLPB_BLOCK_NAMESPACE = 'roelmagdaleno/like-post-block';
  *
  * @since 1.1.0
  */
-const ROLPB_META_KEY = 'rolpb_Likes';
+const ROLPB_META_KEY = 'rolpb_likes';
 
 /**
  * The default icon.
