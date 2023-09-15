@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-const ROLPB_VERSION = '1.1.0';
+const ROLPB_VERSION = '1.2.0';
 
 /**
  * The plugin block namespace.
