@@ -50,11 +50,9 @@ class ROLPB_Block {
 			return $block_content;
 		}
 
-		$rolpb_post = new ROLPB_Post( $post );
-
 		wp_enqueue_script(
 			'lpb-like',
-			plugins_url( 'public/js/rolpb-like.min.js', __DIR__ ),
+			plugins_url( 'public/js/rolpb-like.js', __DIR__ ),
 			array(),
 			ROLPB_VERSION,
 			true
@@ -74,11 +72,6 @@ class ROLPB_Block {
 			'nonces'     => array(
 				'getLikes' => wp_create_nonce( 'rolpb-get-post-likes-nonce' ),
 				'likePost' => wp_create_nonce( 'rolpb-like-post-nonce' ),
-			),
-			'post_id'    => $post->ID,
-			'likes'      => array(
-				'total'    => $rolpb_post->likes(),
-				'fromUser' => $rolpb_post->likes_from_user(),
 			),
 			'url'        => admin_url( 'admin-ajax.php' ),
 			'icons'      => $icons,
@@ -127,6 +120,7 @@ class ROLPB_Block {
 	 * Render the block on the frontend.
 	 *
 	 * @since  1.0.0
+	 * @since  1.3.0 Send custom attributes inside `$attributes` array.
 	 *
 	 * @param  array   $attributes   The block attributes.
 	 * @return string                The rendered block HTML.
@@ -135,13 +129,17 @@ class ROLPB_Block {
 		global $post;
 
 		if ( ! $post ) {
-			return rolpb_get_rendered_html( 0, $attributes );
+			return rolpb_get_rendered_html( 0, 0, $attributes );
 		}
 
-		$rolpb_post = new ROLPB_Post( $post );
-		$likes      = $rolpb_post->likes();
-		$icon_type  = $likes && $rolpb_post->likes_from_user() ? 'active' : 'inactive';
+		$rolpb_post      = new ROLPB_Post( $post );
+		$likes           = $rolpb_post->likes();
+		$likes_from_user = $rolpb_post->likes_from_user();
 
-		return rolpb_get_rendered_html( $likes, $attributes, $icon_type );
+		// Set custom attributes.
+		$attributes['icon_type']       = $likes && $likes_from_user ? 'active' : 'inactive';
+		$attributes['likes_from_user'] = $likes_from_user;
+
+		return rolpb_get_rendered_html( $likes, $post->ID, $attributes );
 	}
 }

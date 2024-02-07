@@ -1,5 +1,4 @@
 let rolpbTimerId;
-let rolpbLike = 0;
 
 /**
  * Debounce function.
@@ -29,9 +28,11 @@ function rolpb_debounce(func, delay) {
  * We scale the icon to `1.1` and then back to `1.0` after 100ms.
  *
  * @since 1.0.0
+ *
+ * @param {object} likeButton The like button element.
  */
-function rolbp_animateIcon() {
-    const icon = document.querySelector('.wp-like-post__button svg');
+function rolbp_animateIcon(likeButton) {
+    const icon = likeButton.querySelector('svg');
 
     if (!icon) {
         return;
@@ -47,15 +48,13 @@ function rolbp_animateIcon() {
  *
  * @since 1.0.0
  */
-function rolpb_replaceIcon() {
-    const button = document.querySelector('.wp-like-post__button');
-
-    if (!button || button.classList.contains('wp-like-post__button--liked')) {
+function rolpb_replaceIcon(likeButton) {
+    if (!likeButton || likeButton.classList.contains('wp-like-post__button--liked')) {
         return;
     }
 
-    button.classList.add('wp-like-post__button--liked');
-    button.innerHTML = ROLPB.icons.active;
+	likeButton.classList.add('wp-like-post__button--liked');
+	likeButton.innerHTML = ROLPB.icons.active;
 }
 
 /**
@@ -84,20 +83,30 @@ let lpbPost = (function () {
      *
      * @since 1.0.0
      *
+     * @param {object} likeButton The like button element.
      * @param {object} settings The settings object.
      *
      * @constructor
      */
-    function Constructor(settings) {
+    function Constructor(likeButton, settings) {
         // Freeze settings so that they cannot be modified
         Object.freeze(settings);
 
+		const postId = parseInt(likeButton.getAttribute('data-post-id'));
+		const likes = {
+			total: parseInt(likeButton.getAttribute('data-total-likes')),
+			fromUser: parseInt(likeButton.getAttribute('data-likes-from-user')),
+		};
+
         // Define instance properties
         Object.defineProperties(this, {
+			likeButton: { value: likeButton },
+			postId: { value: postId },
             likes: {
                 value: {
-                    total: settings.likes.total,
-                    fromUser: settings.likes.fromUser,
+                    total: likes.total,
+                    fromUser: likes.fromUser,
+					toAdd: 0,
                 },
                 writable: true
             },
@@ -118,38 +127,40 @@ let lpbPost = (function () {
      * @since 1.0.0
      */
     Constructor.prototype.like = function () {
-        if (parseInt(this.likes.fromUser) >= parseInt(this._settings.limit)) {
+        if (this.likes.fromUser >= parseInt(this._settings.limit)) {
             return;
         }
 
-        rolpbLike++;
+		this.likes.toAdd++;
         this.likes.fromUser++;
 
-        const postLikes = parseInt(this.likes.total);
-        const likeCount = document.querySelector('.wp-like-post__count');
+        const postLikes = this.likes.total;
+        const likeCount = this.likeButton.parentElement.querySelector('.wp-like-post__count');
 
-        likeCount.innerHTML = (postLikes + rolpbLike).toString();
+        likeCount.innerHTML = (postLikes + this.likes.toAdd).toString();
 
         const processChanges = rolpb_debounce(() => {
             const request = rolpb_getXHR(this._settings.url);
 
             request.onload = () => {
                 if (request.status >= 200 && request.status < 400) {
-                    this.likes.total = this.likes.total + rolpbLike;
-                    rolpbLike = 0;
+                    this.likes.total = this.likes.total + this.likes.toAdd;
+					this.likes.toAdd = 0;
+
+					this.likeButton.dataset.totalLikes = this.likes.total.toString();
                 }
             };
 
-            const postId = this._settings.post_id;
+            const postId = this.postId;
             const nonce = this._settings.nonces.likePost;
 
-            request.send(`action=rolpb_like_post&post_id=${postId}&count=${rolpbLike}&nonce=${nonce}`);
+            request.send(`action=rolpb_like_post&post_id=${postId}&count=${this.likes.toAdd}&nonce=${nonce}`);
         }, 500);
 
         processChanges();
 
-        rolpb_replaceIcon();
-        rolbp_animateIcon();
+        rolpb_replaceIcon(this.likeButton);
+        rolbp_animateIcon(this.likeButton);
     };
 
     /**
@@ -164,30 +175,34 @@ let lpbPost = (function () {
         request.onload = () => {
             if (request.status >= 200 && request.status < 400) {
                 const response = JSON.parse(request.responseText);
-                const countEl = document.querySelector('.wp-like-post__count');
-                const buttonEl = document.querySelector('.wp-like-post__button');
 
-                if (!countEl || !buttonEl) {
-                    return;
-                }
+				if (!this.likeButton) {
+					return;
+				}
+
+                const countEl = this.likeButton.parentElement.querySelector('.wp-like-post__count');
+
+				if (!countEl) {
+					return;
+				}
 
                 const likes = parseInt(response.data.likes);
-                const printedLikes = parseInt(this.likes.total);
+                const printedLikes = this.likes.total;
 
                 if (likes === printedLikes) {
                     return;
                 }
 
                 if (likes > 0) {
-                    buttonEl.classList.add('wp-like-post__button--liked');
-                    buttonEl.innerHTML = ROLPB.icons.active;
+                    this.likeButton.classList.add('wp-like-post__button--liked');
+                    this.likeButton.innerHTML = ROLPB.icons.active;
                 }
 
                 countEl.innerHTML = likes.toString();
             }
         };
 
-        const postId = this._settings.post_id;
+        const postId = this.postId;
         const nonce = this._settings.nonces.getLikes;
         const attributes = JSON.stringify(this._settings.block);
 
@@ -198,17 +213,19 @@ let lpbPost = (function () {
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-    const button = document.querySelector('.wp-like-post__button');
+    const likeButtons = document.querySelectorAll('.wp-like-post__button');
 
-    if (!button || !window.ROLPB) {
-        return;
-    }
+	if (likeButtons.length === 0 || !window.ROLPB) {
+		return;
+	}
 
-    const currentPost = new lpbPost(window.ROLPB);
+	likeButtons.forEach((likeButton) => {
+		let currentPost = new lpbPost(likeButton, window.ROLPB);
 
-    if (ROLPB.attributes.renderWithAjax) {
-        currentPost.getLikes();
-    }
+		if (ROLPB.attributes.renderWithAjax) {
+			currentPost.getLikes();
+		}
 
-    button.addEventListener('click', () => currentPost.like());
+		likeButton.addEventListener('click', () => currentPost.like());
+	});
 });

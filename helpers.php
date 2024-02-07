@@ -38,18 +38,19 @@ function rolpb_get_svg_icon(
  * Returns the block HTML.
  *
  * @since  1.0.0
+ * @since  1.3.0 Change parameter type to WP_Post to get custom properties inside function.
  *
- * @param  int      $likes        The number of likes.
- * @param  array    $attributes   The block attributes.
- * @param  string   $icon_type    The icon type.
+ * @param  int     $total_likes   The total number of likes for the post.
+ * @param  int     $post_id       The post ID.
+ * @param  array   $attributes    The block attributes.
  * @return string                 The rendered block HTML.
  */
-function rolpb_get_rendered_html(
-	int $likes,
-	array $attributes,
-	string $icon_type = 'inactive'
-): string {
-	$button_css       = 'active' === $icon_type ? 'wp-like-post__button--liked' : '';
+function rolpb_get_rendered_html( int $total_likes, int $post_id, array $attributes ): string {
+	// Set default for custom attributes.
+	$attributes['icon_type'] ??= 'inactive';
+	$attributes['likes_from_user'] ??= 0;
+
+	$button_css       = 'active' === $attributes['icon_type'] ? 'wp-like-post__button--liked' : '';
 	$block_attributes = ! str_contains( $_SERVER['REQUEST_URI'], '/wp-json/' )
 		? get_block_wrapper_attributes( array( 'class' => 'wp-like-post__count' ) )
 		: 'class="wp-like-post__count""';
@@ -60,25 +61,29 @@ function rolpb_get_rendered_html(
 	$attributes['iconColorValue'] ??= ROLPB_DEFAULT_ICON_COLOR_VALUE;
 	$attributes['iconWidth']      ??= ROLPB_DEFAULT_ICON_WIDTH;
 
-	$html  = '<div class="wp-like-post__wrapper" style="' . $gap_styles . '">';
-	$html .= '<button type="button" class="wp-like-post__button ' . $button_css . '" ';
-	$html .= 'style="height: ' . $attributes['iconWidth'] . 'px; ';
-	$html .= 'color: ' . $attributes['iconColorValue'] . ';">';
-	$html .= rolpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $icon_type );
+	$html  = '<div class="wp-like-post__wrapper" style="' . esc_attr( $gap_styles ) . '">';
+	$html .= '<button type="button" class="wp-like-post__button ' . esc_attr( $button_css ) . '" ';
+	$html .= 'style="height: ' . esc_attr( $attributes['iconWidth'] ) . 'px; ';
+	$html .= 'color: ' . esc_attr( $attributes['iconColorValue'] ) . ';" ';
+	$html .= 'data-post-id="' . esc_attr( $post_id ) . '" data-total-likes="' . esc_attr( $total_likes ) . '" ';
+	$html .= 'data-likes-from-user="' . esc_attr( $attributes['likes_from_user'] ) . '">';
+	$html .= rolpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $attributes['icon_type'] );
 	$html .= '</button>';
 
-	$html .= '<div ' . $block_attributes . '>' . $likes . '</div>';
+	$html .= '<div ' . $block_attributes . '>' . esc_html( $total_likes ) . '</div>';
 	$html .= '</div>';
 
 	/**
 	 * Filters the rendered block HTML.
 	 *
 	 * @since 1.1.0
+	 * @since 1.3.0 Add `$post_id` parameters.
 	 *
 	 * @param string   $html         The rendered block HTML.
+	 * @param int      $post_id      The post id.
 	 * @param array    $attributes   The block attributes.
 	 */
-	return apply_filters( 'rolpb_likes_rendered_html', $html, $attributes );
+	return apply_filters( 'rolpb_likes_rendered_html', $html, $post_id, $attributes );
 }
 
 /**
