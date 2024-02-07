@@ -26,6 +26,7 @@ class ROLPB_Like {
 	 * This function is called via AJAX.
 	 *
 	 * @since 1.1.0
+	 * @since 1.3.0 Accept post ids as a comma-separated string (bulk mode).
 	 */
 	public function get(): void {
 		$nonce = sanitize_text_field( $_POST['nonce'] );
@@ -34,17 +35,24 @@ class ROLPB_Like {
 			wp_send_json_error( 'Invalid nonce.' );
 		}
 
-		if ( ! isset( $_POST['post_id'] ) ) {
-			wp_send_json_error( 'The required data does not exist.' );
+		if ( empty( $_POST['post_ids'] ) ) {
+			wp_send_json_error( 'Missing post ids.' );
 		}
 
-		$post_id = intval( sanitize_text_field( $_POST['post_id'] ) );
-		$post    = new ROLPB_Post( $post_id );
+		$post_ids = explode( ',', sanitize_text_field( $_POST['post_ids'] ) );
 
-		wp_send_json_success( array(
-			'likes'   => $post->likes(),
-			'post_id' => $post_id,
-		) );
+		if ( empty( $post_ids ) ) {
+			wp_send_json_error( 'Invalid post ids.' );
+		}
+
+		$likes = array();
+
+		foreach ( $post_ids as $post_id ) {
+			$post = new ROLPB_Post( $post_id );
+			$likes[ $post_id ] = $post->likes();
+		}
+
+		wp_send_json_success( $likes );
 	}
 
 	/**

@@ -77,6 +77,62 @@ function rolpb_getXHR(url) {
     return request;
 }
 
+/**
+ * Get the total number of likes for multiple posts.
+ * We send an AJAX request to the server and update the like count.
+ *
+ * @since 1.3.0
+ *
+ * @param {array} postIds The post IDs.
+ * @param {object} settings The settings object.
+ */
+function rolpb_getBulkLikes(postIds, settings) {
+	const request = rolpb_getXHR(settings.url);
+
+	request.onload = () => {
+		if (request.status >= 200 && request.status < 400) {
+			const response = JSON.parse(request.responseText);
+
+			if (response.success) {
+				const postsWithLikes = response.data;
+
+				postIds.forEach((id) => {
+					const likeButton = document.querySelector(`.wp-like-post__button[data-post-id="${id}"]`);
+
+					if (!likeButton) {
+						return;
+					}
+
+					const countEl = likeButton.parentElement.querySelector('.wp-like-post__count');
+
+					if (!countEl) {
+						return;
+					}
+
+					const likes = parseInt(postsWithLikes[id]);
+					const printedLikes = parseInt(likeButton.getAttribute('data-total-likes'));
+
+					if (likes === printedLikes) {
+						return;
+					}
+
+					if (likes > 0) {
+						likeButton.classList.add('wp-like-post__button--liked');
+						likeButton.innerHTML = settings.icons.active;
+					}
+
+					countEl.innerHTML = likes.toString();
+				});
+			}
+		}
+	};
+
+	const nonce = settings.nonces.getLikes;
+	const attributes = JSON.stringify(settings.block);
+
+	request.send(`action=rolpb_get_post_likes&post_ids=${postIds}&nonce=${nonce}&attributes=${attributes}`);
+}
+
 let lpbPost = (function () {
     /**
      * The Constructor.
@@ -170,43 +226,7 @@ let lpbPost = (function () {
      * @since 1.0.0
      */
     Constructor.prototype.getLikes = function () {
-        const request = rolpb_getXHR(this._settings.url);
-
-        request.onload = () => {
-            if (request.status >= 200 && request.status < 400) {
-                const response = JSON.parse(request.responseText);
-
-				if (!this.likeButton) {
-					return;
-				}
-
-                const countEl = this.likeButton.parentElement.querySelector('.wp-like-post__count');
-
-				if (!countEl) {
-					return;
-				}
-
-                const likes = parseInt(response.data.likes);
-                const printedLikes = this.likes.total;
-
-                if (likes === printedLikes) {
-                    return;
-                }
-
-                if (likes > 0) {
-                    this.likeButton.classList.add('wp-like-post__button--liked');
-                    this.likeButton.innerHTML = ROLPB.icons.active;
-                }
-
-                countEl.innerHTML = likes.toString();
-            }
-        };
-
-        const postId = this.postId;
-        const nonce = this._settings.nonces.getLikes;
-        const attributes = JSON.stringify(this._settings.block);
-
-        request.send(`action=rolpb_get_post_likes&post_id=${postId}&nonce=${nonce}&attributes=${attributes}`);
+		rolpb_getBulkLikes([this.postId], this._settings);
     }
 
     return Constructor;
@@ -219,13 +239,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		return;
 	}
 
+	let postIds = [];
+
 	likeButtons.forEach((likeButton) => {
 		let currentPost = new lpbPost(likeButton, window.ROLPB);
 
-		if (ROLPB.attributes.renderWithAjax) {
-			currentPost.getLikes();
+		if (currentPost._settings.attributes.renderWithAjax) {
+			postIds.push(currentPost.postId);
 		}
 
 		likeButton.addEventListener('click', () => currentPost.like());
 	});
+
+	if (postIds.length === 0) {
+		return;
+	}
+
+	rolpb_getBulkLikes(postIds, window.ROLPB);
 });
