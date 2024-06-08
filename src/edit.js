@@ -61,6 +61,7 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                             value={ limit }
                             min={ 1 }
                             onChange={ ( limit ) => setAttributes( { limit: parseInt( limit ) } ) }
+							disabled={ unlimited }
                             help={ __( 'Limit the number of likes per user.', 'like-post-block' ) }
                         />
                     </PanelRow>

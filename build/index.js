@@ -102,6 +102,7 @@ function Edit({
     onChange: limit => setAttributes({
       limit: parseInt(limit)
     }),
+    disabled: unlimited,
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Limit the number of likes per user.', 'like-post-block')
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Unlimited', 'like-post-block'),
