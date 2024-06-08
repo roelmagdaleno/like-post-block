@@ -23,6 +23,7 @@ import ServerSideRender from '@wordpress/server-side-render';
 
 export function Edit( { attributes, setAttributes, iconColor, setIconColor, clientId } ) {
     const {
+		unlimited,
         icon,
         iconColorValue,
         iconWidth,
@@ -60,9 +61,18 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                             value={ limit }
                             min={ 1 }
                             onChange={ ( limit ) => setAttributes( { limit: parseInt( limit ) } ) }
+							disabled={ unlimited }
                             help={ __( 'Limit the number of likes per user.', 'like-post-block' ) }
                         />
                     </PanelRow>
+					<PanelRow>
+						<ToggleControl
+							label={ __( 'Unlimited', 'like-post-block' ) }
+							checked={ unlimited }
+							onChange={ ( unlimited ) => setAttributes( { unlimited } ) }
+							help={ __( 'Allow users to like the post without limit.', 'like-post-block' ) }
+						/>
+					</PanelRow>
                     <PanelRow>
                         <ToggleControl
                             label={ __( 'Render with AJAX', 'like-post-block' ) }
