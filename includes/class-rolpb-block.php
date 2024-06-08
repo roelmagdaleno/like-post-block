@@ -107,6 +107,10 @@ class ROLPB_Block {
 					'type'    => 'number',
 					'default' => LPB_DEFAULT_LIMIT,
 				),
+				'unlimited'      => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
 				'renderWithAjax' => array(
 					'type'    => 'boolean',
 					'default' => true,
