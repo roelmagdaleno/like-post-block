@@ -183,7 +183,7 @@ let lpbPost = (function () {
      * @since 1.0.0
      */
     Constructor.prototype.like = function () {
-        if (this.likes.fromUser >= parseInt(this._settings.limit)) {
+        if ('' === this._settings.unlimited && this.likes.fromUser >= parseInt(this._settings.limit)) {
             return;
         }
 

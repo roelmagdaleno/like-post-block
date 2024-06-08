@@ -66,9 +66,11 @@ class ROLPB_Block {
 		);
 
 		$block['attrs']['renderWithAjax'] ??= true;
+		$block['attrs']['unlimited'] ??= false;
 
 		wp_localize_script( 'lpb-like', 'ROLPB', array(
 			'limit'      => $block['attrs']['limit'] ?? LPB_DEFAULT_LIMIT,
+			'unlimited'  => $block['attrs']['unlimited'] ?? false,
 			'nonces'     => array(
 				'getLikes' => wp_create_nonce( 'rolpb-get-post-likes-nonce' ),
 				'likePost' => wp_create_nonce( 'rolpb-like-post-nonce' ),
