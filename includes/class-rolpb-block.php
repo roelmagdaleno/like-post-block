@@ -52,7 +52,7 @@ class ROLPB_Block {
 
 		wp_enqueue_script(
 			'lpb-like',
-			plugins_url( 'public/js/rolpb-like.min.js', __DIR__ ),
+			plugins_url( 'public/js/rolpb-like.js', __DIR__ ),
 			array(),
 			ROLPB_VERSION,
 			true
@@ -74,8 +74,9 @@ class ROLPB_Block {
 			'unlimited'  => $block['attrs']['unlimited'] ?? false,
 			'likeUnlike' => $block['attrs']['likeUnlike'] ?? false,
 			'nonces'     => array(
-				'getLikes' => wp_create_nonce( 'rolpb-get-post-likes-nonce' ),
-				'likePost' => wp_create_nonce( 'rolpb-like-post-nonce' ),
+				'getLikes'   => wp_create_nonce( 'rolpb-get-post-likes-nonce' ),
+				'likePost'   => wp_create_nonce( 'rolpb-like-post-nonce' ),
+				'unlikePost' => wp_create_nonce( 'rolpb-unlike-post-nonce' ),
 			),
 			'url'        => admin_url( 'admin-ajax.php' ),
 			'icons'      => $icons,

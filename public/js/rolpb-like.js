@@ -47,14 +47,30 @@ function rolbp_animateIcon(likeButton) {
  * We also add the `wp-like-post__button--liked` class to the button.
  *
  * @since 1.0.0
+ * @since 1.4.0 Added the `status` parameter.
+ *
+ * @params {object} likeButton The like button element.
+ * @params {string} status The status of the like button (active, inactive).
  */
-function rolpb_replaceIcon(likeButton) {
-    if (!likeButton || likeButton.classList.contains('wp-like-post__button--liked')) {
+function rolpb_replaceIcon(likeButton, status = 'active') {
+	if (!likeButton) {
+		return;
+	}
+
+	// We don't need to do anything if the button is already liked.
+    if ('active' === status && likeButton.classList.contains('wp-like-post__button--liked')) {
         return;
     }
 
-	likeButton.classList.add('wp-like-post__button--liked');
-	likeButton.innerHTML = ROLPB.icons.active;
+	if ('active' === status) {
+		likeButton.classList.add('wp-like-post__button--liked');
+	}
+
+	if ('inactive' === status) {
+		likeButton.classList.remove('wp-like-post__button--liked');
+	}
+
+	likeButton.innerHTML = ROLPB.icons[status];
 }
 
 /**
@@ -145,8 +161,9 @@ let lpbPost = (function () {
      * @constructor
      */
     function Constructor(likeButton, settings) {
-        // Freeze settings so that they cannot be modified
-        Object.freeze(settings);
+		settings.limit = '1' === settings.likeUnlike ? 1 : settings.limit;
+
+        Object.freeze(settings); // Freeze settings so that they cannot be modified
 
 		const postId = parseInt(likeButton.getAttribute('data-post-id'));
 		const likes = {
@@ -158,6 +175,8 @@ let lpbPost = (function () {
         Object.defineProperties(this, {
 			likeButton: { value: likeButton },
 			postId: { value: postId },
+			isLikingPost: { value: false, writable: true },
+			isUnlikingPost: { value: false, writable: true },
             likes: {
                 value: {
                     total: likes.total,
@@ -183,17 +202,25 @@ let lpbPost = (function () {
      * @since 1.0.0
      */
     Constructor.prototype.like = function () {
+		if (this.isUnlikingPost) {
+			return;
+		}
+
         if ('' === this._settings.unlimited && this.likes.fromUser >= parseInt(this._settings.limit)) {
             return;
         }
+
+		this.isLikingPost = true;
 
 		this.likes.toAdd++;
         this.likes.fromUser++;
 
         const postLikes = this.likes.total;
-        const likeCount = this.likeButton.parentElement.querySelector('.wp-like-post__count');
 
-        likeCount.innerHTML = (postLikes + this.likes.toAdd).toString();
+		if ('' === this._settings.likeUnlike) {
+			const likeCount = this.likeButton.parentElement.querySelector('.wp-like-post__count');
+			likeCount.innerHTML = (postLikes + this.likes.toAdd).toString();
+		}
 
         const processChanges = rolpb_debounce(() => {
             const request = rolpb_getXHR(this._settings.url);
@@ -204,6 +231,10 @@ let lpbPost = (function () {
 					this.likes.toAdd = 0;
 
 					this.likeButton.dataset.totalLikes = this.likes.total.toString();
+
+					if ('1' === this._settings.likeUnlike) {
+						this.likeButton.addEventListener('click', () => this.unlike(), { once: true });
+					}
                 }
             };
 
@@ -217,7 +248,55 @@ let lpbPost = (function () {
 
         rolpb_replaceIcon(this.likeButton);
         rolbp_animateIcon(this.likeButton);
+
+		this.isLikingPost = false;
     };
+
+	/**
+	 * Unlike the post.
+	 *
+	 * We decrement the like count and send an AJAX request to the server.
+	 * The AJAX request is debounced to prevent multiple requests.
+	 * The request is sent after 100ms of the last click.
+	 * We also animate the like icon.
+	 *
+	 * @since 1.4.0
+	 */
+	Constructor.prototype.unlike = function () {
+		if (this.isLikingPost || this.isUnlikingPost) {
+			return;
+		}
+
+		this.isUnlikingPost = true;
+
+		const processChanges = rolpb_debounce(() => {
+			const request = rolpb_getXHR(this._settings.url);
+
+			request.onload = () => {
+				if (request.status >= 200 && request.status < 400) {
+					this.likes.total = (this.likes.total - 1) <= 0 ? 0 : this.likes.total - 1;
+					this.likes.fromUser = 0;
+
+					this.likeButton.dataset.totalLikes = this.likes.total.toString();
+
+					// Restore listeners.
+					this.likeButton.addEventListener('click', () => this.like(), { once: true });
+				}
+			};
+
+			const postId = this.postId;
+			const nonce = this._settings.nonces.unlikePost;
+
+			request.send(`action=rolpb_unlike_post&post_id=${postId}&count=${this.likes.fromUser || 1}&nonce=${nonce}`);
+		}, 500);
+
+		processChanges();
+
+		rolpb_replaceIcon(this.likeButton, 'inactive');
+		rolbp_animateIcon(this.likeButton);
+
+		this.isUnlikingPost = false;
+	};
 
     /**
      * Get the total number of likes for the current post.
@@ -248,7 +327,14 @@ document.addEventListener('DOMContentLoaded', () => {
 			postIds.push(currentPost.postId);
 		}
 
-		likeButton.addEventListener('click', () => currentPost.like());
+		// Add unlike functionality if setting is enabled.
+		if (currentPost._settings.likeUnlike === '1' && currentPost.likes.fromUser > 0) {
+			likeButton.addEventListener('click', () => currentPost.unlike(), { once: true });
+			return;
+		}
+
+		const clickOnce = currentPost._settings.likeUnlike === '1';
+		likeButton.addEventListener('click', () => currentPost.like(), { once: clickOnce });
 	});
 
 	if (postIds.length === 0) {
