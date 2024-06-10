@@ -52,7 +52,7 @@ class ROLPB_Block {
 
 		wp_enqueue_script(
 			'lpb-like',
-			plugins_url( 'public/js/rolpb-like.js', __DIR__ ),
+			plugins_url( 'public/js/rolpb-like.min.js', __DIR__ ),
 			array(),
 			ROLPB_VERSION,
 			true
