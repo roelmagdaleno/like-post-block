@@ -75,6 +75,7 @@ function Edit({
   clientId
 }) {
   const {
+    likeUnlike,
     unlimited,
     icon,
     iconColorValue,
@@ -102,7 +103,7 @@ function Edit({
     onChange: limit => setAttributes({
       limit: parseInt(limit)
     }),
-    disabled: unlimited,
+    disabled: unlimited || likeUnlike,
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Limit the number of likes per user.', 'like-post-block')
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Unlimited', 'like-post-block'),
@@ -110,7 +111,15 @@ function Edit({
     onChange: unlimited => setAttributes({
       unlimited
     }),
+    disabled: likeUnlike,
     help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Allow users to like the post without limit.', 'like-post-block')
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Like & Unlike', 'like-post-block'),
+    checked: likeUnlike,
+    onChange: likeUnlike => setAttributes({
+      likeUnlike
+    }),
+    help: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Allow users to like and unlike the post when clicking the button. If this setting is enabled, the like counter won\'t render.', 'like-post-block')
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_5__.ToggleControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Render with AJAX', 'like-post-block'),
     checked: renderWithAjax,

@@ -52,7 +52,7 @@ class ROLPB_Block {
 
 		wp_enqueue_script(
 			'lpb-like',
-			plugins_url( 'public/js/rolpb-like.min.js', __DIR__ ),
+			plugins_url( 'public/js/rolpb-like.js', __DIR__ ),
 			array(),
 			ROLPB_VERSION,
 			true
@@ -67,13 +67,16 @@ class ROLPB_Block {
 
 		$block['attrs']['renderWithAjax'] ??= true;
 		$block['attrs']['unlimited'] ??= false;
+		$block['attrs']['likeUnlike'] ??= false;
 
 		wp_localize_script( 'lpb-like', 'ROLPB', array(
 			'limit'      => $block['attrs']['limit'] ?? LPB_DEFAULT_LIMIT,
 			'unlimited'  => $block['attrs']['unlimited'] ?? false,
+			'likeUnlike' => $block['attrs']['likeUnlike'] ?? false,
 			'nonces'     => array(
-				'getLikes' => wp_create_nonce( 'rolpb-get-post-likes-nonce' ),
-				'likePost' => wp_create_nonce( 'rolpb-like-post-nonce' ),
+				'getLikes'   => wp_create_nonce( 'rolpb-get-post-likes-nonce' ),
+				'likePost'   => wp_create_nonce( 'rolpb-like-post-nonce' ),
+				'unlikePost' => wp_create_nonce( 'rolpb-unlike-post-nonce' ),
 			),
 			'url'        => admin_url( 'admin-ajax.php' ),
 			'icons'      => $icons,
@@ -110,6 +113,10 @@ class ROLPB_Block {
 					'default' => LPB_DEFAULT_LIMIT,
 				),
 				'unlimited'      => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'likeUnlike'     => array(
 					'type'    => 'boolean',
 					'default' => false,
 				),

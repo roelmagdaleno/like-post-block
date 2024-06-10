@@ -7,7 +7,9 @@ The Like Post Block plugin registers a WordPress block that allows you to add a 
 ### Key Features
 
 - Add a like button to any post, page or custom post type
+- Unlike the post when clicking the button again
 - Limit the number of likes per user
+- Unlimited likes per post
 - Save user's IP address to prevent multiple likes
 - Supports any Gutenberg template
 - Render likes using AJAX
@@ -57,6 +59,8 @@ The count is the number of likes a post has. You can increase the count by click
 You can limit the number of likes per user by using the limit setting.
 
 Default: `10`
+
+Since `1.4.0` version, you can enable the unlimited setting to allow unlimited likes per post.
 
 ### AJAX
 

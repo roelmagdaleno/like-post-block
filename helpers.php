@@ -70,7 +70,12 @@ function rolpb_get_rendered_html( int $total_likes, int $post_id, array $attribu
 	$html .= rolpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $attributes['icon_type'] );
 	$html .= '</button>';
 
-	$html .= '<div ' . $block_attributes . '>' . esc_html( $total_likes ) . '</div>';
+	$like_unlike = $attributes['likeUnlike'] ?? false;
+
+	if ( ! $like_unlike ) {
+		$html .= '<div ' . $block_attributes . '>' . esc_html( $total_likes ) . '</div>';
+	}
+
 	$html .= '</div>';
 
 	/**

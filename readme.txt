@@ -63,6 +63,11 @@ No, the user can only like posts, pages and custom post types.
 
 == Changelog ==
 
+= 1.4.0 =
+
+* New setting: Unlike when click the button again (#10)
+* New setting: Add unlimited setting (#12)
+
 = 1.3.0 =
 
 * Like counter functionality uses last post inside query loop (#8).
