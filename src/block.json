@@ -1,11 +1,11 @@
 {
-	"$schema": "https://schemas.wp.org/trunk/block.json",
-	"apiVersion": 2,
-	"name": "roelmagdaleno/like-post-block",
-	"version": "1.4.0",
-	"title": "Like Post",
-	"category": "widgets",
-	"description": "Add a button to like any post type.",
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "roelmagdaleno/like-post-block",
+    "version": "1.4.0",
+    "title": "Like Post",
+    "category": "widgets",
+    "description": "Add a button to like any post type.",
     "attributes": {
         "icon": {
             "type": "string",
@@ -23,11 +23,11 @@
             "type": "number",
             "default": 10
         },
-		"unlimited": {
+        "unlimited": {
             "type": "boolean",
             "default": false
         },
-		"likeUnlike": {
+        "likeUnlike": {
             "type": "boolean",
             "default": false
         },
@@ -36,8 +36,8 @@
             "default": true
         }
     },
-	"supports": {
-		"html": false,
+    "supports": {
+        "html": false,
         "color": {
             "text": true,
             "background": false
@@ -56,8 +56,8 @@
             "blockGap": true
         }
     },
-	"textdomain": "like-post-block",
-	"editorScript": "file:./index.js",
-	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css"
+    "textdomain": "like-post-block",
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css"
 }

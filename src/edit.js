@@ -23,8 +23,8 @@ import ServerSideRender from '@wordpress/server-side-render';
 
 export function Edit( { attributes, setAttributes, iconColor, setIconColor, clientId } ) {
     const {
-		likeUnlike,
-		unlimited,
+        likeUnlike,
+        unlimited,
         icon,
         iconColorValue,
         iconWidth,
@@ -52,7 +52,7 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
 
     const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
-	return (
+    return (
         <>
             <InspectorControls>
                 <PanelBody>
@@ -62,27 +62,27 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                             value={ limit }
                             min={ 1 }
                             onChange={ ( limit ) => setAttributes( { limit: parseInt( limit ) } ) }
-							disabled={ unlimited || likeUnlike }
+                            disabled={ unlimited || likeUnlike }
                             help={ __( 'Limit the number of likes per user.', 'like-post-block' ) }
                         />
                     </PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Unlimited', 'like-post-block' ) }
-							checked={ unlimited }
-							onChange={ ( unlimited ) => setAttributes( { unlimited } ) }
-							disabled={ likeUnlike }
-							help={ __( 'Allow users to like the post without limit.', 'like-post-block' ) }
-						/>
-					</PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Like & Unlike', 'like-post-block' ) }
-							checked={ likeUnlike }
-							onChange={ ( likeUnlike ) => setAttributes( { likeUnlike } ) }
-							help={ __( 'Allow users to like and unlike the post when clicking the button. If this setting is enabled, the like counter won\'t render.', 'like-post-block' ) }
-						/>
-					</PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label={ __( 'Unlimited', 'like-post-block' ) }
+                            checked={ unlimited }
+                            onChange={ ( unlimited ) => setAttributes( { unlimited } ) }
+                            disabled={ likeUnlike }
+                            help={ __( 'Allow users to like the post without limit.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label={ __( 'Like & Unlike', 'like-post-block' ) }
+                            checked={ likeUnlike }
+                            onChange={ ( likeUnlike ) => setAttributes( { likeUnlike } ) }
+                            help={ __( 'Allow users to like and unlike the post when clicking the button. If this setting is enabled, the like counter won\'t render.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
                     <PanelRow>
                         <ToggleControl
                             label={ __( 'Render with AJAX', 'like-post-block' ) }
@@ -153,7 +153,7 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                 />
             </div>
         </>
-	);
+    );
 }
 
 const iconColorAttributes = {
