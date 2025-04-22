@@ -17,6 +17,7 @@ import {
     PanelBody,
     PanelRow,
     ToggleControl,
+    SelectControl,
 } from '@wordpress/components';
 
 import ServerSideRender from '@wordpress/server-side-render';
@@ -30,6 +31,7 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
         iconWidth,
         limit,
         renderWithAjax,
+        trackLikesBy,
     } = attributes;
 
     const HandThumbUpIcon = (
@@ -89,6 +91,18 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                             checked={ renderWithAjax }
                             onChange={ ( renderWithAjax ) => setAttributes( { renderWithAjax: renderWithAjax } ) }
                             help={ __( 'If you are using a caching system, enabling this feature will avoid from being cached. The count will show after your page is rendered.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <SelectControl
+                            label={ __( 'Track likes by', 'like-post-block' ) }
+                            value={ trackLikesBy }
+							options={ [
+								{ label: __( 'IP Address', 'like-post-block' ), value: 'ip_address' },
+								{ label: __( 'User ID', 'like-post-block' ), value: 'user_id' },
+							] }
+                            onChange={ ( trackLikesBy ) => setAttributes( { trackLikesBy: trackLikesBy } ) }
+							help={ __( 'Select how to track likes. If you select "User ID", the likes will be tracked by the user ID. If you select "IP Address", the likes will be tracked by the IP address.', 'like-post-block' ) }
                         />
                     </PanelRow>
                 </PanelBody>

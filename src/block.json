@@ -34,6 +34,10 @@
         "renderWithAjax": {
             "type": "boolean",
             "default": true
+        },
+        "trackLikesBy": {
+            "type": "string",
+            "default": "ip_address"
         }
     },
     "supports": {
