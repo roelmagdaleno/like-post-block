@@ -124,6 +124,10 @@ class ROLPB_Block {
                     'type'    => 'boolean',
                     'default' => true,
                 ),
+                'trackLikesBy'   => array(
+                    'type'    => 'string',
+                    'default' => 'ip_address',
+                ),
             ),
             'render_callback' => array( $this, 'render' ),
         ) );
