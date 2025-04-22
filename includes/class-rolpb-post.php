@@ -56,6 +56,7 @@ class ROLPB_Post {
         }
 
         $ip_addresses = $this->ip_addresses();
+
         return $ip_addresses[ $user_ip ] ?? 0;
     }
 
@@ -70,5 +71,18 @@ class ROLPB_Post {
     public function ip_addresses(): array {
         $ip_addresses = get_post_meta( $this->post->ID, 'rolpb_ip_addresses', true );
         return empty( $ip_addresses ) ? array() : $ip_addresses;
+    }
+
+    /**
+     * Get the user IDs for the current post.
+     * These user IDs are used to prevent users from liking a post multiple times.
+     *
+     * @since  1.5.0
+     *
+     * @return array   The user IDs for the post.
+     */
+    public function user_ids(): array {
+        $user_ids = get_post_meta( $this->post->ID, 'rolpb_user_ids', true );
+        return empty( $user_ids ) ? array() : $user_ids;
     }
 }
