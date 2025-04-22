@@ -200,6 +200,7 @@ let lpbPost = (function () {
      * If the user has already reached the limit of liked posts, we don't do anything.
      *
      * @since 1.0.0
+	 * @since 1.5.0 Added the `trackLikesBy` parameter.
      */
     Constructor.prototype.like = function () {
         if (this.isUnlikingPost) {
@@ -240,8 +241,9 @@ let lpbPost = (function () {
 
             const postId = this.postId;
             const nonce = this._settings.nonces.likePost;
+			const trackLikesBy = this._settings.attributes.trackLikesBy;
 
-            request.send(`action=rolpb_like_post&post_id=${postId}&count=${this.likes.toAdd}&nonce=${nonce}`);
+            request.send(`action=rolpb_like_post&post_id=${postId}&count=${this.likes.toAdd}&track_likes_by=${trackLikesBy}&nonce=${nonce}`);
         }, 500);
 
         processChanges();
@@ -261,6 +263,7 @@ let lpbPost = (function () {
      * We also animate the like icon.
      *
      * @since 1.4.0
+	 * @since 1.5.0 Added the `trackLikesBy` parameter.
      */
     Constructor.prototype.unlike = function () {
         if (this.isLikingPost || this.isUnlikingPost) {
@@ -286,8 +289,9 @@ let lpbPost = (function () {
 
             const postId = this.postId;
             const nonce = this._settings.nonces.unlikePost;
+			const trackLikesBy = this._settings.attributes.trackLikesBy;
 
-            request.send(`action=rolpb_unlike_post&post_id=${postId}&count=${this.likes.fromUser || 1}&nonce=${nonce}`);
+            request.send(`action=rolpb_unlike_post&post_id=${postId}&count=${this.likes.fromUser || 1}&track_likes_by=${trackLikesBy}&nonce=${nonce}`);
         }, 500);
 
         processChanges();
