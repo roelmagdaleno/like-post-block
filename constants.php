@@ -48,6 +48,13 @@ const ROLPB_DEFAULT_ICON_WIDTH = 30;
 const ROLPB_DEFAULT_ICON_COLOR_VALUE = '#000000';
 
 /**
+ * The default value for the `trackLikesBy` attribute.
+ *
+ * @since 1.5.0
+ */
+const ROLPB_DEFAULT_TRACK_LIKES_BY = 'ip_address';
+
+/**
  * The default limit.
  *
  * @since 1.0.0

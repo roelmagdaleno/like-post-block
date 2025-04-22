@@ -60,12 +60,14 @@ function rolpb_get_rendered_html( int $total_likes, int $post_id, array $attribu
     $attributes['icon']           ??= ROLPB_DEFAULT_ICON;
     $attributes['iconColorValue'] ??= ROLPB_DEFAULT_ICON_COLOR_VALUE;
     $attributes['iconWidth']      ??= ROLPB_DEFAULT_ICON_WIDTH;
+    $attributes['trackLikesBy']   ??= ROLPB_DEFAULT_TRACK_LIKES_BY;
 
     $html  = '<div class="wp-like-post__wrapper" style="' . esc_attr( $gap_styles ) . '">';
     $html .= '<button type="button" class="wp-like-post__button ' . esc_attr( $button_css ) . '" ';
     $html .= 'style="height: ' . esc_attr( $attributes['iconWidth'] ) . 'px; ';
     $html .= 'color: ' . esc_attr( $attributes['iconColorValue'] ) . ';" ';
     $html .= 'data-post-id="' . esc_attr( $post_id ) . '" data-total-likes="' . esc_attr( $total_likes ) . '" ';
+    $html .= 'data-track-likes-by="' . esc_attr( $attributes['trackLikesBy'] ) . '" ';
     $html .= 'data-likes-from-user="' . esc_attr( $attributes['likes_from_user'] ) . '">';
     $html .= rolpb_get_svg_icon( $attributes['icon'], $attributes['iconWidth'], $attributes['icon_type'] );
     $html .= '</button>';
