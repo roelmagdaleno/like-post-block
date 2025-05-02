@@ -52,7 +52,7 @@ class ROLPB_Block {
 
         wp_enqueue_script(
             'lpb-like',
-            plugins_url( 'public/js/rolpb-like.js', __DIR__ ),
+            plugins_url( 'public/js/rolpb-like.min.js', __DIR__ ),
             array(),
             ROLPB_VERSION,
             true
@@ -88,6 +88,7 @@ class ROLPB_Block {
 
     /**
      * Registers the block using the metadata loaded from the `block.json` file.
+     *
      * Behind the scenes, it registers also all assets, so they can be enqueued
      * through the block editor in the corresponding context.
      *
@@ -136,11 +137,11 @@ class ROLPB_Block {
     /**
      * Render the block on the frontend.
      *
-     * @since  1.0.0
-     * @since  1.3.0 Send custom attributes inside `$attributes` array.
+     * @since 1.0.0
+     * @since 1.3.0 Send custom attributes inside `$attributes` array.
      *
-     * @param  array   $attributes   The block attributes.
-     * @return string                The rendered block HTML.
+     * @param array $attributes The block attributes.
+     * @return string The rendered block HTML.
      */
     public function render( array $attributes ): string {
         global $post;

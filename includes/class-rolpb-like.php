@@ -64,6 +64,7 @@ class ROLPB_Like {
      * This function is called via AJAX.
      *
      * @since 1.0.0
+     * @since 1.5.0 Added `track_likes_by` parameter and functionality.
      */
     public function like(): void {
         $nonce = sanitize_text_field( $_POST['nonce'] );

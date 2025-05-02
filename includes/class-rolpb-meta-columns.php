@@ -24,7 +24,7 @@ class ROLPB_Meta_Columns {
      *
      * @since 1.1.0
      *
-     * @param WP_Query   $query   The WP_Query instance.
+     * @param WP_Query $query The `WP_Query` instance.
      */
     public function sort_by_likes( WP_Query $query ): void {
         $order_by = $query->get( 'orderby' );
@@ -59,10 +59,10 @@ class ROLPB_Meta_Columns {
     /**
      * Add the "Likes" column in post type tables columns.
      *
-     * @since  1.1.0
+     * @since 1.1.0
      *
-     * @param  array   $columns   The post type tables columns.
-     * @return array              The post type tables columns.
+     * @param array $columns The post type tables columns.
+     * @return array The post type tables columns.
      */
     public function column_heading( array $columns ): array {
         $columns['likes'] = 'Likes';
@@ -74,8 +74,8 @@ class ROLPB_Meta_Columns {
      *
      * @since 1.1.0
      *
-     * @param string   $column_name   The column name.
-     * @param int      $post_id       The post ID.
+     * @param string $column_name The column name.
+     * @param int $post_id The post ID.
      */
     public function column_content( string $column_name, int $post_id ): void {
         if ( 'likes' !== $column_name ) {
@@ -90,10 +90,10 @@ class ROLPB_Meta_Columns {
     /**
      * Add the columns to be sorted in the post type tables.
      *
-     * @since  1.1.0
+     * @since 1.1.0
      *
-     * @param  array   $columns   The post type tables columns to be sorted.
-     * @return array              The post type tables columns to be sorted.
+     * @param array $columns The post type tables columns to be sorted.
+     * @return array The post type tables columns to be sorted.
      */
     public function column_sort( array $columns ): array {
         $columns['likes'] = 'likes';
