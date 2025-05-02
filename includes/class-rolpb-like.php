@@ -89,18 +89,14 @@ class ROLPB_Like {
         $likes = $likes + $count;
         update_post_meta( $post_id, ROLPB_META_KEY, $likes );
 
-        $user_ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
+		$track_likes_by = new ROLPB_TrackLikesBy( array(
+			'post_id'        => $post_id,
+			'count'          => $count,
+			'action'         => 'like',
+			'track_likes_by' => sanitize_text_field( $_POST['track_likes_by'] ?? ROLPB_DEFAULT_TRACK_LIKES_BY ),
+		) );
 
-        // Update likes from the current user.
-        if ( ! empty( $user_ip ) ) {
-            $rolpb_post   = new ROLPB_Post( $post_id );
-            $ip_addresses = $rolpb_post->ip_addresses();
-            $user_count   = $ip_addresses[ $user_ip ] ?? 0;
-
-            $ip_addresses[ $user_ip ] = $user_count + $count;
-
-            update_post_meta( $post_id, 'rolpb_ip_addresses', $ip_addresses );
-        }
+	    $track_likes_by->update();
 
         wp_send_json_success( array(
             'count' => $count,
@@ -138,18 +134,14 @@ class ROLPB_Like {
         $likes = $likes - $count;
         update_post_meta( $post_id, ROLPB_META_KEY, $likes );
 
-        $user_ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
+	    $track_likes_by = new ROLPB_TrackLikesBy( array(
+		    'post_id'        => $post_id,
+		    'count'          => $count,
+		    'action'         => 'unlike',
+		    'track_likes_by' => sanitize_text_field( $_POST['track_likes_by'] ?? ROLPB_DEFAULT_TRACK_LIKES_BY ),
+	    ) );
 
-        // Update likes from the current user.
-        if ( ! empty( $user_ip ) ) {
-            $rolpb_post   = new ROLPB_Post( $post_id );
-            $ip_addresses = $rolpb_post->ip_addresses();
-            $user_count   = $ip_addresses[ $user_ip ] ?? 0;
-
-            $ip_addresses[ $user_ip ] = $user_count - $count;
-
-            update_post_meta( $post_id, 'rolpb_ip_addresses', $ip_addresses );
-        }
+	    $track_likes_by->update();
 
         wp_send_json_success( array(
             'count' => $count,
