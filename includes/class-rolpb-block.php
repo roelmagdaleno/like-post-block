@@ -68,6 +68,7 @@ class ROLPB_Block {
         $block['attrs']['renderWithAjax'] ??= true;
         $block['attrs']['unlimited'] ??= false;
         $block['attrs']['likeUnlike'] ??= false;
+		$block['attrs']['trackLikesBy'] ??= ROLPB_DEFAULT_TRACK_LIKES_BY;
 
         wp_localize_script( 'lpb-like', 'ROLPB', array(
             'limit'      => $block['attrs']['limit'] ?? LPB_DEFAULT_LIMIT,
