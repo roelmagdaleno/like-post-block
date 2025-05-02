@@ -50,7 +50,7 @@ class ROLPB_Post {
      */
     public function likes_from_user(): int {
         $user_ip = sanitize_text_field( $_SERVER['REMOTE_ADDR'] ?? '' );
-	    $user_id = get_current_user_id();
+        $user_id = get_current_user_id();
 
         if ( empty( $user_ip ) && empty( $user_id ) ) {
             return 0;
@@ -60,15 +60,10 @@ class ROLPB_Post {
         $user_ids     = $this->user_ids();
 
         $likes_from_ip_address = $ip_addresses[ $user_ip ] ?? 0;
-		$likes_from_user_id    = $user_ids[ $user_id ] ?? 0;
+        $likes_from_user_id    = $user_ids[ $user_id ] ?? 0;
 
-		// If the user is logged in, we will use the user ID to track likes.
-		if ( $user_id ) {
-			return $likes_from_user_id;
-		}
-
-		// If the user is not logged in, we will use the IP address to track likes.
-		return $likes_from_ip_address;
+        // Sum the likes from the IP address and user ID.
+        return $likes_from_ip_address + $likes_from_user_id;
     }
 
     /**

@@ -65,7 +65,7 @@ No, the user can only like posts, pages and custom post types.
 
 = 1.5.0 =
 
-* Option to Track Likes by User Account Only (Ignore IP Address) (#15)
+* Feature: Option to Track Likes by User Account Only (Ignore IP Address) (#15)
 
 = 1.4.0 =
 
