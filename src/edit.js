@@ -17,19 +17,21 @@ import {
     PanelBody,
     PanelRow,
     ToggleControl,
+    SelectControl,
 } from '@wordpress/components';
 
 import ServerSideRender from '@wordpress/server-side-render';
 
 export function Edit( { attributes, setAttributes, iconColor, setIconColor, clientId } ) {
     const {
-		likeUnlike,
-		unlimited,
+        likeUnlike,
+        unlimited,
         icon,
         iconColorValue,
         iconWidth,
         limit,
         renderWithAjax,
+        trackLikesBy,
     } = attributes;
 
     const HandThumbUpIcon = (
@@ -52,7 +54,7 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
 
     const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
-	return (
+    return (
         <>
             <InspectorControls>
                 <PanelBody>
@@ -62,33 +64,45 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                             value={ limit }
                             min={ 1 }
                             onChange={ ( limit ) => setAttributes( { limit: parseInt( limit ) } ) }
-							disabled={ unlimited || likeUnlike }
+                            disabled={ unlimited || likeUnlike }
                             help={ __( 'Limit the number of likes per user.', 'like-post-block' ) }
                         />
                     </PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Unlimited', 'like-post-block' ) }
-							checked={ unlimited }
-							onChange={ ( unlimited ) => setAttributes( { unlimited } ) }
-							disabled={ likeUnlike }
-							help={ __( 'Allow users to like the post without limit.', 'like-post-block' ) }
-						/>
-					</PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Like & Unlike', 'like-post-block' ) }
-							checked={ likeUnlike }
-							onChange={ ( likeUnlike ) => setAttributes( { likeUnlike } ) }
-							help={ __( 'Allow users to like and unlike the post when clicking the button. If this setting is enabled, the like counter won\'t render.', 'like-post-block' ) }
-						/>
-					</PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label={ __( 'Unlimited', 'like-post-block' ) }
+                            checked={ unlimited }
+                            onChange={ ( unlimited ) => setAttributes( { unlimited } ) }
+                            disabled={ likeUnlike }
+                            help={ __( 'Allow users to like the post without limit.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label={ __( 'Like & Unlike', 'like-post-block' ) }
+                            checked={ likeUnlike }
+                            onChange={ ( likeUnlike ) => setAttributes( { likeUnlike } ) }
+                            help={ __( 'Allow users to like and unlike the post when clicking the button. If this setting is enabled, the like counter won\'t render.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
                     <PanelRow>
                         <ToggleControl
                             label={ __( 'Render with AJAX', 'like-post-block' ) }
                             checked={ renderWithAjax }
                             onChange={ ( renderWithAjax ) => setAttributes( { renderWithAjax: renderWithAjax } ) }
                             help={ __( 'If you are using a caching system, enabling this feature will avoid from being cached. The count will show after your page is rendered.', 'like-post-block' ) }
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <SelectControl
+                            label={ __( 'Track likes by', 'like-post-block' ) }
+                            value={ trackLikesBy }
+							options={ [
+								{ label: __( 'IP Address', 'like-post-block' ), value: 'ip_address' },
+								{ label: __( 'User ID', 'like-post-block' ), value: 'user_id' },
+							] }
+                            onChange={ ( trackLikesBy ) => setAttributes( { trackLikesBy: trackLikesBy } ) }
+							help={ __( 'Select how to track likes. If you select "User ID", the likes will be tracked by the user ID. If you select "IP Address", the likes will be tracked by the IP address.', 'like-post-block' ) }
                         />
                     </PanelRow>
                 </PanelBody>
@@ -153,7 +167,7 @@ export function Edit( { attributes, setAttributes, iconColor, setIconColor, clie
                 />
             </div>
         </>
-	);
+    );
 }
 
 const iconColorAttributes = {

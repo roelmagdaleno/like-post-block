@@ -2,9 +2,9 @@
 Contributors:      rokumetal
 Tags:              like, heart, like post, block
 Requires at least: 6.2
-Tested up to:      6.5.4
+Tested up to:      6.8
 Requires PHP:      7.4
-Stable tag:        1.4.0
+Stable tag:        1.5.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,10 @@ No, the user can only like posts, pages and custom post types.
 5. Active like button on the front-end
 
 == Changelog ==
+
+= 1.5.0 =
+
+* Feature: Option to Track Likes by User Account Only (Ignore IP Address) (#15)
 
 = 1.4.0 =
 

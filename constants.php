@@ -1,7 +1,7 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+    exit; // Exit if accessed directly.
 }
 
 /**
@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-const ROLPB_VERSION = '1.4.0';
+const ROLPB_VERSION = '1.5.0';
 
 /**
  * The plugin block namespace.
@@ -46,6 +46,13 @@ const ROLPB_DEFAULT_ICON_WIDTH = 30;
  * @since 1.0.0
  */
 const ROLPB_DEFAULT_ICON_COLOR_VALUE = '#000000';
+
+/**
+ * The default value for the `trackLikesBy` attribute.
+ *
+ * @since 1.5.0
+ */
+const ROLPB_DEFAULT_TRACK_LIKES_BY = 'ip_address';
 
 /**
  * The default limit.
